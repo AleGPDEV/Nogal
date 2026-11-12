@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nogal — Muebles de diseño</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFFFFF; --paper:#FFFFFF; --stage:#E7EAE3; --stage-2:#DDE1D8; --ink:#1A1A1A; --muted:#626963; --line:#DCE0D9;
+  --green:#1E3A2F; --green-2:#2A4A3C; --butter:#F0CF5C;
+  --accent:#1E3A2F; --accent-d:#13271F; --olive:#1E3A2F; --soft:#E7EAE3;
+  --ok:#2F7A4A; --warn:#9A630F; --err:#B3261E; --r:20px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Bricolage Grotesque",system-ui,sans-serif;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.serif{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:700;font-stretch:80%;letter-spacing:-.025em;line-height:1;margin:0}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+img{max-width:100%;display:block}
+:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+.hidden{display:none!important}
+.price,.tot,.kpi b,.qty span{font-variant-numeric:tabular-nums}
+
+/* header */
+.topbar{background:var(--green);color:#E4EAE5;font-size:13px;text-align:center;padding:8px 12px}
+header.site{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.94);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.hrow{display:flex;align-items:center;gap:10px;height:64px}
+.logo{font-size:26px;font-weight:800;font-stretch:75%;letter-spacing:-.03em;text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo svg{width:24px;height:24px}
+nav.main{display:flex;gap:2px;margin-left:22px}
+nav.main a{text-decoration:none;padding:8px 12px;border-radius:999px;font-size:15px;color:var(--muted)}
+nav.main a:hover{color:var(--ink)}
+nav.main a.on{color:var(--ink);background:var(--stage)}
+.hspace{flex:1}
+.iconbtn{position:relative;width:42px;height:42px;border-radius:999px;border:0;background:transparent;display:grid;place-items:center}
+.iconbtn:hover{background:var(--stage)}
+.iconbtn svg{width:22px;height:22px}
+.badge{position:absolute;top:2px;right:0;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--butter);color:var(--ink);font-size:11.5px;font-weight:700;display:grid;place-items:center}
+.menu-btn{display:none}
+@media (max-width:900px){nav.main{display:none}.menu-btn{display:grid}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1.5px solid transparent;border-radius:999px;padding:12px 22px;font-weight:600;font-size:15px;text-decoration:none;white-space:nowrap;transition:background .15s,border-color .15s,color .15s}
+.btn-p,.btn-a{background:var(--green);color:#fff}
+.btn-p:hover,.btn-a:hover{background:var(--accent-d)}
+.btn-o{background:transparent;border-color:var(--ink)}
+.btn-o:hover{background:var(--ink);color:#fff}
+.btn-g{background:#fff;border-color:var(--line)}
+.btn-g:hover{border-color:var(--ink)}
+.btn-wa{background:#1F8F4E;color:#fff}
+.btn-wa:hover{background:#17773f}
+.btn-light{background:#fff;color:var(--green)}
+.btn-light:hover{background:var(--butter)}
+.btn-sm{padding:7px 14px;font-size:14px}
+.btn-block{width:100%}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+.link{background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;color:var(--muted);font-size:15px}
+.link:hover{color:var(--ink)}
+
+/* hero */
+.hero{margin-top:20px;background:var(--green);color:#fff;border-radius:32px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);overflow:hidden;position:relative}
+.hero-copy{padding:56px 48px 48px;display:flex;flex-direction:column;justify-content:space-between;gap:40px}
+.hero h1{font-size:clamp(48px,7.6vw,108px);font-weight:800;font-stretch:75%;line-height:.9;letter-spacing:-.035em;max-width:9ch}
+.hero p{font-size:18px;color:#C9D6CE;max-width:36ch;margin:0 0 22px}
+.hero-stage{position:relative;min-height:440px;display:flex;flex-direction:column;justify-content:flex-end;padding:40px 28px 24px;gap:20px}
+#herostage{flex:1;position:relative;min-height:240px}
+#herostage svg,#herostage img{position:absolute;inset:0;width:100%;height:100%}
+.hero-pick{position:relative;background:#fff;color:var(--ink);border-radius:20px;padding:14px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-pick .nm{flex:1;min-width:140px}
+.hero-pick .nm b{display:block;font-size:16px}
+.hero-pick .nm span{font-size:14px;color:var(--muted)}
+.hsw{display:flex;gap:8px}
+.hsw button{width:30px;height:30px;border-radius:999px;border:2px solid #fff;box-shadow:0 0 0 1px var(--line);padding:0}
+.hsw button.on{box-shadow:0 0 0 2px var(--ink)}
+@media (max-width:820px){.hero{grid-template-columns:1fr;border-radius:24px}.hero-copy{padding:32px 22px 0;gap:18px;justify-content:flex-start}.hero-stage{min-height:0;padding:12px 12px 12px}#herostage{min-height:190px}}
+
+.perks{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin:36px 0 8px}
+.perk{display:flex;gap:12px;align-items:flex-start}
+.perk svg{flex:none;width:24px;height:24px;color:var(--green)}
+.perk b{display:block;font-weight:600;font-size:15px}
+.perk span{font-size:14px;color:var(--muted)}
+@media (max-width:900px){.perks{grid-template-columns:1fr 1fr;gap:18px}}
+
+.sec{padding:44px 0 8px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:20px}
+.sec-h h2{font-size:clamp(30px,4.4vw,48px)}
+
+.cats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.cat{background:var(--stage);border-radius:24px;text-decoration:none;overflow:hidden;position:relative;aspect-ratio:3/3.6;display:block}
+.cat .ca{position:absolute;inset:0}
+.cat .ca svg{width:100%;height:100%}
+.cat b{position:absolute;left:14px;bottom:12px;font-weight:600;font-size:16px}
+.cat:hover{background:var(--stage-2)}
+@media (max-width:900px){.cats{display:flex;overflow-x:auto;scrollbar-width:none;margin:0 -20px;padding:0 20px}.cats::-webkit-scrollbar{display:none}.cat{flex:0 0 42%}}
+
+/* grid & product cards */
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 18px}
+@media (max-width:1000px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:700px){.grid{grid-template-columns:repeat(2,1fr);gap:22px 12px}}
+.grid>*{min-width:0}
+.card{display:flex;flex-direction:column;position:relative;min-width:0}
+.card .media{aspect-ratio:1/1;background:var(--stage);display:block;position:relative;border-radius:var(--r);overflow:hidden}
+.card .media svg,.card .media img{width:100%;height:100%;object-fit:cover}
+@media (hover:hover){.card:hover .media{background:var(--stage-2)}}
+.card .body{padding:12px 2px 0;display:flex;flex-direction:column;gap:2px}
+.card .nm{font-weight:600;text-decoration:none;line-height:1.25;font-size:16px}
+.card .mt{font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.price{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;margin-top:4px}
+.price b{font-weight:700;font-size:16px}
+.price s{color:var(--muted);font-size:14px}
+.plus{position:absolute;right:10px;bottom:10px;z-index:2;width:42px;height:42px;border-radius:999px;border:0;background:var(--green);color:#fff;display:grid;place-items:center}
+.plus svg{width:20px;height:20px}
+.plus:hover{background:var(--accent-d)}
+.plus[disabled]{display:none}
+.tag{position:absolute;top:10px;left:10px;background:var(--butter);color:var(--ink);font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:999px;z-index:2}
+.tag.out{background:var(--ink);color:#fff}
+.fav{position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border-radius:999px;border:0;background:rgba(255,255,255,.85);display:grid;place-items:center}
+.fav svg{width:19px;height:19px}
+.fav.on svg{fill:var(--green);stroke:var(--green)}
+.swatches{display:flex;gap:5px;margin-top:6px}
+.sw{width:14px;height:14px;border-radius:999px;border:1px solid rgba(0,0,0,.12);display:inline-block}
+
+/* shop */
+.shop-head{padding:30px 0 8px}
+.shop-head h1{font-size:clamp(40px,6vw,72px);font-weight:800;font-stretch:75%}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 18px}
+.search{flex:1 1 240px;display:flex;align-items:center;gap:8px;background:var(--stage);border-radius:999px;padding:0 16px;height:46px}
+.search input{border:0;background:transparent;outline:0;flex:1;height:100%}
+.search:focus-within{box-shadow:0 0 0 2px var(--green)}
+.search svg{width:18px;height:18px;color:var(--muted)}
+.sel{height:46px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:0 14px}
+@media (max-width:700px){.filters .search{flex-basis:100%}.filters .sel{flex:1 1 0;min-width:0;font-size:14px;padding:0 8px;height:42px}}
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:8px 16px;font-size:15px;text-decoration:none}
+.chip:hover{border-color:var(--ink)}
+.chip.on{background:var(--green);color:#fff;border-color:var(--green)}
+.empty{text-align:center;padding:64px 20px;color:var(--muted)}
+.empty h3{color:var(--ink);font-size:30px;margin-bottom:8px}
+
+/* product page */
+.crumbs{font-size:14px;color:var(--muted);padding:20px 0 4px}
+.crumbs a{text-decoration:none}
+.crumbs a:hover{text-decoration:underline}
+.pd{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;padding:12px 0 30px;align-items:start}
+@media (max-width:860px){.pd{grid-template-columns:1fr;gap:22px}}
+.pd-media{background:var(--stage);border-radius:28px;overflow:hidden;aspect-ratio:1/1;position:relative}
+@media (min-width:861px){.pd-media{position:sticky;top:84px}}
+.pd-media svg,.pd-media img{width:100%;height:100%;object-fit:cover}
+.pd h1{font-size:clamp(36px,4.6vw,60px);font-weight:800;font-stretch:75%;line-height:.95;margin:8px 0 14px}
+.pd .price b{font-size:28px}
+.pd .price s{font-size:17px}
+.eyebrow{font-size:15px;color:var(--muted)}
+.save{background:var(--butter);color:var(--ink);font-size:13px;font-weight:700;padding:3px 10px;border-radius:999px}
+.stock{font-size:14.5px;display:flex;align-items:center;gap:8px;margin:12px 0 20px}
+.dot{width:8px;height:8px;border-radius:9px;background:var(--ok)}
+.dot.low{background:var(--warn)}.dot.out{background:var(--err)}
+.opt-l{font-size:14.5px;font-weight:600;margin:18px 0 10px}
+.colors{display:flex;gap:8px;flex-wrap:wrap}
+.cbtn{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 14px 5px 5px;font-size:14.5px}
+.cbtn .sw{width:24px;height:24px}
+.cbtn.on{border-color:var(--ink)}
+.buy{display:flex;gap:10px;margin:24px 0 10px}
+.buy .btn{flex:1;padding:14px 22px}
+.qty{display:inline-flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;background:#fff;height:50px}
+.qty button{width:42px;height:100%;border:0;background:transparent;font-size:18px}
+.qty span{min-width:26px;text-align:center;font-weight:700}
+.qty.sm{height:36px}.qty.sm button{width:32px;font-size:16px}
+.specs{margin-top:24px;border-top:1px solid var(--line)}
+.specs div{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:15px}
+.specs span{color:var(--muted)}
+.specs b{font-weight:500;text-align:right}
+.desc{color:#3d423e;margin-top:20px;white-space:pre-line;max-width:60ch}
+.assure{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
+.assure div{background:var(--stage);border-radius:16px;padding:12px 14px;font-size:14px}
+
+/* drawers */
+.scrim{position:fixed;inset:0;background:rgba(20,30,25,.4);z-index:60;opacity:0;pointer-events:none;transition:opacity .2s}
+.scrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(430px,100%);background:#fff;z-index:61;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.drawer.left{left:0;right:auto;transform:translateX(-100%)}
+.drawer.left.on{transform:none}
+.dh{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+.dh h3{font-size:28px}
+.db{flex:1;overflow:auto;padding:8px 20px}
+.df{border-top:1px solid var(--line);padding:16px 20px}
+.ci{display:grid;grid-template-columns:84px 1fr;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.ci .th{width:84px;height:84px;border-radius:14px;overflow:hidden;background:var(--stage)}
+.ci .th svg,.ci .th img{width:100%;height:100%;object-fit:cover}
+.ci .r1{display:flex;justify-content:space-between;gap:8px}
+.ci .r2{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.tot{display:flex;justify-content:space-between;font-size:15px;margin:5px 0}
+.tot.big{font-size:20px;font-weight:700;margin-top:12px}
+.tot.disc{color:var(--ok)}
+.progress{height:6px;background:var(--stage);border-radius:9px;overflow:hidden;margin:8px 0 12px}
+.progress i{display:block;height:100%;background:var(--green)}
+.mnav a{display:block;padding:14px 0;border-bottom:1px solid var(--line);text-decoration:none;font-size:22px;font-weight:600;font-stretch:85%}
+
+/* checkout */
+.co{display:grid;grid-template-columns:1.3fr 1fr;gap:28px;padding:20px 0 40px;align-items:start}
+@media (max-width:880px){.co{grid-template-columns:1fr}}
+.panel{background:#fff;border:1.5px solid var(--line);border-radius:22px;padding:22px}
+.panel h3{font-size:24px;margin-bottom:14px}
+.panel+.panel{margin-top:16px}
+aside .panel{background:var(--stage);border-color:var(--stage)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg .full{grid-column:1/-1}
+@media (max-width:520px){.fg{grid-template-columns:1fr}}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600}
+label.f input,label.f select,label.f textarea{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:12px 13px;font-size:16px;font-weight:400;outline:0}
+label.f input:focus,label.f select:focus,label.f textarea:focus{border-color:var(--green)}
+label.f.bad input,label.f.bad select{border-color:var(--err)}
+label.f .er{color:var(--err);font-size:13px;font-weight:500}
+.radios{display:grid;gap:10px}
+.radio{display:flex;gap:12px;align-items:flex-start;border:1.5px solid var(--line);border-radius:16px;padding:14px;background:#fff;cursor:pointer}
+.radio input{margin-top:4px;accent-color:var(--green)}
+.radio.on{border-color:var(--green);background:#F4F6F2}
+.radio b{display:block;font-weight:600;font-size:15px}
+.radio span{font-size:14px;color:var(--muted)}
+.radio em{margin-left:auto;font-style:normal;font-weight:700;font-size:14.5px}
+.sumi{display:flex;gap:12px;align-items:center;padding:8px 0}
+.sumi .th{width:56px;height:56px;border-radius:12px;overflow:hidden;background:#fff;flex:none}
+.sumi .th svg,.sumi .th img{width:100%;height:100%;object-fit:cover}
+.sumi .n{flex:1;font-size:14.5px;line-height:1.3}
+.coupon{display:flex;gap:8px;margin:14px 0}
+.coupon input{flex:1;min-width:0;border:1.5px solid var(--line);border-radius:999px;padding:9px 16px;background:#fff;text-transform:uppercase}
+
+/* success */
+.ok-hero{text-align:center;padding:44px 0 12px}
+.ok-hero .ic{width:68px;height:68px;border-radius:99px;background:var(--butter);color:var(--ink);display:grid;place-items:center;margin:0 auto 16px}
+.ok-hero h1{font-size:clamp(40px,6vw,64px);font-weight:800;font-stretch:75%}
+.ok-hero p{font-size:17px}
+.note{background:#FBF2CF;border-radius:16px;padding:14px 16px;font-size:15px}
+.note.info{background:var(--stage)}
+pre.bank{white-space:pre-wrap;font:inherit;margin:6px 0 0}
+
+/* orders */
+.ord{background:#fff;border:1.5px solid var(--line);border-radius:18px;padding:18px;margin-bottom:12px}
+.ord-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.st,.paid,.unpaid{font-size:12.5px;font-weight:700;padding:4px 11px;border-radius:999px;background:var(--stage)}
+.st-nuevo{background:var(--butter);color:var(--ink)}
+.st-confirmado{background:#DCE6F5;color:#2D4C80}
+.st-enviado{background:#E8E1F4;color:#553D86}
+.st-entregado{background:#D8EBDD;color:var(--ok)}
+.st-cancelado{background:#ECECEC;color:#6c6c6c}
+.paid{background:#D8EBDD;color:var(--ok)}
+.unpaid{background:#FBF2CF;color:var(--warn)}
+
+/* admin */
+.adm-h{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:26px 0 6px}
+.adm-h h1{font-size:44px;font-weight:800;font-stretch:75%}
+.tabs{display:flex;gap:4px;overflow-x:auto;margin:16px 0 20px;scrollbar-width:none;background:var(--stage);padding:4px;border-radius:999px;width:max-content;max-width:100%}
+.tabs button{border:0;background:none;padding:9px 16px;border-radius:999px;color:var(--muted);font-weight:600;white-space:nowrap}
+.tabs button.on{color:var(--ink);background:#fff}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}}
+.kpi{background:var(--stage);border-radius:20px;padding:18px}
+.kpi span{font-size:14px;color:var(--muted)}
+.kpi b{display:block;font-weight:800;font-stretch:80%;font-size:34px;letter-spacing:-.02em;margin-top:6px}
+.kpi:first-child{background:var(--green);color:#fff}.kpi:first-child span{color:#C9D6CE}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th,.tbl td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:middle}
+.tbl th{font-size:13.5px;color:var(--muted);font-weight:600}
+.tbl .th{width:56px;height:56px;border-radius:12px;overflow:hidden;background:var(--stage)}
+.tbl .th svg,.tbl .th img{width:100%;height:100%;object-fit:cover}
+.tblwrap{overflow-x:auto}
+.inl{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.minisel{border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;background:#fff;font-size:14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.two{grid-template-columns:1fr}}
+.bar{display:flex;align-items:center;gap:10px;font-size:14.5px;margin:10px 0}
+.bar i{display:block;height:8px;border-radius:9px;background:var(--green)}
+.bar .bw{flex:1;background:var(--stage);border-radius:9px}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:16px;background:rgba(20,30,25,.45)}
+.modal .box{background:#fff;border-radius:24px;width:min(660px,100%);max-height:92vh;overflow:auto;padding:24px}
+.modal .box.sm{width:min(400px,100%)}
+.modal h3{font-size:30px;margin-bottom:16px}
+.colrow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.colrow input[type=text]{flex:1;border:1.5px solid var(--line);border-radius:12px;padding:9px 12px}
+.colrow input[type=color]{width:44px;height:40px;border:1.5px solid var(--line);border-radius:12px;padding:2px;background:#fff}
+.imgprev{width:120px;height:120px;border-radius:14px;overflow:hidden;background:var(--stage)}
+.imgprev svg,.imgprev img{width:100%;height:100%;object-fit:cover}
+.chk{display:flex;gap:8px;align-items:center;font-size:15px}
+.chk input{accent-color:var(--green)}
+
+/* footer, toast */
+footer.site{background:var(--green);color:#C9D6CE;margin-top:64px;padding:48px 0 26px;font-size:15px}
+footer .fbrand{font-size:clamp(56px,10vw,140px);font-weight:800;font-stretch:75%;letter-spacing:-.04em;line-height:.85;color:#fff;margin:0 0 36px}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:24px}
+@media (max-width:760px){footer .cols{grid-template-columns:1fr 1fr}}
+footer h4{color:#fff;font-weight:700;font-size:16px;margin:0 0 10px}
+footer a{display:block;text-decoration:none;color:#C9D6CE;padding:3px 0}
+footer a:hover{color:#fff}
+footer .bottom{border-top:1px solid rgba(255,255,255,.15);margin-top:30px;padding-top:16px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13.5px;color:#9FB2A6}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(30px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-size:15px;z-index:90;opacity:0;transition:.25s;pointer-events:none;max-width:92vw}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.sysnote{font-size:13.5px;padding:8px 12px;text-align:center;background:#FBF2CF}
+.sticky-buy{display:none}
+@media (max-width:860px){.sticky-buy{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:35;background:#fff;border-top:1px solid var(--line);padding:10px 16px;gap:12px;align-items:center}.sticky-buy .btn{flex:1}body.has-sticky{padding-bottom:72px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="topbar" id="topbar">Envío gratis a todo Uruguay desde $ 30.000</div>
+<div id="sysnote"></div>
+<header class="site">
+  <div class="wrap hrow">
+    <button class="iconbtn menu-btn" data-a="menu" aria-label="Menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    <a class="logo" href="#inicio"><svg viewBox="0 0 32 32"><rect x="1" y="1" width="30" height="30" rx="9" fill="#1E3A2F"/><path d="M16 6c-5 5-5 15 0 20 5-5 5-15 0-20z" fill="#F0CF5C"/><path d="M16 9v15" stroke="#1E3A2F" stroke-width="1.4"/></svg><span id="brand">Nogal</span></a>
+    <nav class="main" id="mainnav"></nav>
+    <div class="hspace"></div>
+    <button class="iconbtn" data-a="search" aria-label="Buscar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+    <a class="iconbtn" href="#favoritos" aria-label="Favoritos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span class="badge hidden" id="favcount"></span></a>
+    <a class="iconbtn" href="#mis-pedidos" aria-label="Mis pedidos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></a>
+    <button class="iconbtn" data-a="cart" aria-label="Carrito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 7h14l-1.3 11.1a2 2 0 0 1-2 1.9H8.3a2 2 0 0 1-2-1.9z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/></svg><span class="badge hidden" id="cartcount"></span></button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="fbrand" id="f-big">Nogal</p>
+    <div class="cols">
+      <div><h4 id="f-brand">Nogal</h4><p style="margin:0;max-width:300px">Muebles de madera maciza y textiles nobles, pensados para durar. Diseño local, fabricación cuidada.</p></div>
+      <div><h4>Tienda</h4><div id="f-cats"></div></div>
+      <div><h4>Ayuda</h4><a href="#envios">Envíos y entregas</a><a href="#envios">Cambios y garantía</a><a href="#mis-pedidos">Seguir mi pedido</a></div>
+      <div><h4>Contacto</h4><div id="f-contact"></div></div>
+    </div>
+    <div class="bottom"><span id="f-copy"></span><a href="#admin" style="display:inline;padding:0">Panel de administración</a></div>
+  </div>
+</footer>
+
+<div class="scrim" id="scrim" data-a="close"></div>
+<aside class="drawer" id="cartdrawer" aria-label="Carrito"></aside>
+<aside class="drawer left" id="menudrawer" aria-label="Menú"></aside>
+<div id="modal"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= Datos base ================= */
+const CATS = [
+  {id:'living', n:'Living', art:'sofa', c:'#C9B79C'},
+  {id:'comedor', n:'Comedor', art:'table', c:'#8C6B4F'},
+  {id:'dormitorio', n:'Dormitorio', art:'bed', c:'#7E8C6E'},
+  {id:'oficina', n:'Oficina', art:'desk', c:'#3E4A5B'},
+  {id:'almacenamiento', n:'Almacenamiento', art:'shelf', c:'#B5552B'},
+  {id:'iluminacion', n:'Iluminación', art:'floorlamp', c:'#D9A441'}
+];
+const ART_TYPES = {sofa:'Sofá',armchair:'Sillón',coffeetable:'Mesa ratona',table:'Mesa de comedor',chair:'Silla',sideboard:'Aparador',bed:'Cama',nightstand:'Mesa de luz',wardrobe:'Ropero',desk:'Escritorio',officechair:'Silla de oficina',shelf:'Biblioteca',floorlamp:'Lámpara de pie',pendant:'Lámpara colgante'};
+const DEPTOS = ['Montevideo','Canelones','Maldonado','Colonia','San José','Florida','Lavalleja','Rocha','Treinta y Tres','Cerro Largo','Durazno','Flores','Soriano','Río Negro','Paysandú','Salto','Artigas','Rivera','Tacuarembó'];
+const STATUSES = [['nuevo','Nuevo'],['confirmado','Confirmado'],['enviado','Enviado'],['entregado','Entregado'],['cancelado','Cancelado']];
+const PAYS = {transferencia:'Transferencia bancaria', efectivo:'Efectivo al recibir / retirar', tarjeta:'Tarjeta de crédito o débito'};
+
+/* Catálogo de respaldo: se muestra solo si la base de datos no está disponible para quien visita. */
+const BASE_PRODUCTS = [
+ {id:'p01',name:'Sofá Aurora 3 cuerpos',cat:'living',type:'sofa',price:42990,compare:49990,stock:6,material:'Lino lavado, estructura de eucalipto',dims:'210 × 92 × 84 cm',colors:[{n:'Arena',h:'#C9B79C'},{n:'Oliva',h:'#6B7350'},{n:'Azul pizarra',h:'#3E4A5B'}],desc:'Asientos profundos con relleno de espuma de alta densidad y capa de pluma siliconada. Fundas desmontables y lavables.',featured:true,active:true,order:1},
+ {id:'p02',name:'Sofá Duna 2 cuerpos',cat:'living',type:'sofa',price:34990,compare:0,stock:4,material:'Pana gruesa, patas de paraíso',dims:'170 × 88 × 80 cm',colors:[{n:'Terracota',h:'#B5552B'},{n:'Crudo',h:'#E3D8C6'}],desc:'Compacto y muy cómodo, ideal para livings de apartamento. Respaldo con almohadones sueltos.',featured:false,active:true,order:2},
+ {id:'p03',name:'Sillón Oslo',cat:'living',type:'armchair',price:18990,compare:21990,stock:8,material:'Bouclé de lana, base de roble',dims:'78 × 82 × 76 cm',colors:[{n:'Natural',h:'#E8E0D2'},{n:'Mostaza',h:'#C8963E'},{n:'Verde musgo',h:'#5F6B4E'}],desc:'Líneas redondeadas y abrazo envolvente. El sillón de lectura que todos quieren.',featured:true,active:true,order:3},
+ {id:'p04',name:'Mesa ratona Luna',cat:'living',type:'coffeetable',price:9490,compare:0,stock:10,material:'Roble macizo aceitado',dims:'110 × 60 × 40 cm',colors:[{n:'Roble natural',h:'#C79A6B'},{n:'Roble oscuro',h:'#6E4A30'}],desc:'Tapa de 3 cm con cantos suavizados y estante inferior para revistas.',featured:false,active:true,order:4},
+ {id:'p05',name:'Mesa de comedor Prado',cat:'comedor',type:'table',price:32990,compare:36990,stock:5,material:'Roble macizo, terminación al aceite',dims:'180 × 90 × 76 cm · 6 personas',colors:[{n:'Roble natural',h:'#C79A6B'},{n:'Nogal',h:'#6E4A30'}],desc:'Mesa de 6 lugares con patas cónicas. Cada tabla es seleccionada a mano: no hay dos iguales.',featured:true,active:true,order:5},
+ {id:'p06',name:'Silla Nórdica',cat:'comedor',type:'chair',price:3990,compare:0,stock:40,material:'Asiento tapizado, patas de haya',dims:'46 × 52 × 82 cm',colors:[{n:'Gris perla',h:'#B9B4AC'},{n:'Terracota',h:'#B5552B'},{n:'Negro',h:'#2B2620'}],desc:'Precio por unidad. Liviana, apilable y muy resistente al uso diario.',featured:false,active:true,order:6},
+ {id:'p07',name:'Silla Viena',cat:'comedor',type:'chair',price:4790,compare:5490,stock:24,material:'Madera curvada, asiento de esterilla',dims:'43 × 50 × 84 cm',colors:[{n:'Natural',h:'#D2B48C'},{n:'Ébano',h:'#3A2E26'}],desc:'Un clásico de bistró reinterpretado. Precio por unidad.',featured:false,active:true,order:7},
+ {id:'p08',name:'Aparador Lima',cat:'comedor',type:'sideboard',price:27990,compare:0,stock:3,material:'Petiribí y enchapado natural',dims:'160 × 42 × 78 cm',colors:[{n:'Verde salvia',h:'#8A9A7B'},{n:'Arcilla',h:'#C27C5B'}],desc:'Tres puertas con cierre suave y estantes regulables. Frentes laqueados al agua.',featured:true,active:true,order:8},
+ {id:'p09',name:'Cama Alba 2 plazas',cat:'dormitorio',type:'bed',price:35990,compare:39990,stock:4,material:'Respaldo tapizado en lino, base de pino',dims:'Para colchón 140 × 190 cm',colors:[{n:'Salvia',h:'#7E8C6E'},{n:'Lino crudo',h:'#D8CCB8'},{n:'Azul noche',h:'#2F3A4C'}],desc:'Respaldo acolchado de 110 cm. Disponible en 2 plazas y Queen a pedido.',featured:true,active:true,order:9},
+ {id:'p10',name:'Mesa de luz Nido',cat:'dormitorio',type:'nightstand',price:5990,compare:0,stock:15,material:'Paraíso macizo',dims:'45 × 38 × 52 cm',colors:[{n:'Crema',h:'#EADFCB'},{n:'Oliva',h:'#6B7350'}],desc:'Dos cajones con guías telescópicas y tiradores de cuero.',featured:false,active:true,order:10},
+ {id:'p11',name:'Ropero Brisa 3 puertas',cat:'dormitorio',type:'wardrobe',price:44990,compare:0,stock:2,material:'MDF enchapado en roble',dims:'150 × 58 × 200 cm',colors:[{n:'Roble',h:'#C9A47A'},{n:'Blanco tiza',h:'#EFEAE2'}],desc:'Barral, estantes y cajonera interna. Se entrega armado en Montevideo.',featured:false,active:true,order:11},
+ {id:'p12',name:'Escritorio Taller',cat:'oficina',type:'desk',price:15990,compare:17990,stock:7,material:'Tapa de roble, patas de hierro',dims:'130 × 60 × 75 cm',colors:[{n:'Azul pizarra',h:'#3E4A5B'},{n:'Terracota',h:'#B5552B'}],desc:'Escritorio con cajonera colgante y pasacables. Ideal para home office.',featured:false,active:true,order:12},
+ {id:'p13',name:'Silla ergonómica Foco',cat:'oficina',type:'officechair',price:12990,compare:0,stock:9,material:'Malla respirable, base de aluminio',dims:'62 × 62 × 98–108 cm',colors:[{n:'Grafito',h:'#3A3A3A'},{n:'Arena',h:'#C9B79C'}],desc:'Soporte lumbar regulable, altura a gas y apoyabrazos 2D.',featured:false,active:true,order:13},
+ {id:'p14',name:'Biblioteca Escalonada',cat:'almacenamiento',type:'shelf',price:13990,compare:0,stock:6,material:'Pino macizo laqueado',dims:'90 × 32 × 180 cm',colors:[{n:'Natural',h:'#C79A6B'},{n:'Terracota',h:'#B5552B'},{n:'Verde',h:'#5F6B4E'}],desc:'Cinco niveles para libros y objetos. Incluye anclaje a pared.',featured:true,active:true,order:14},
+ {id:'p15',name:'Lámpara de pie Arco',cat:'iluminacion',type:'floorlamp',price:7990,compare:9490,stock:12,material:'Acero pintado, base de mármol',dims:'Alto 190 cm · alcance 120 cm',colors:[{n:'Mostaza',h:'#D9A441'},{n:'Negro',h:'#2B2620'},{n:'Blanco',h:'#EDE8E0'}],desc:'Luz cálida sobre el sillón o la mesa ratona. Lámpara E27 no incluida.',featured:false,active:true,order:15},
+ {id:'p16',name:'Colgante Cesta',cat:'iluminacion',type:'pendant',price:4490,compare:0,stock:18,material:'Fibra natural tejida a mano',dims:'Ø 45 × 30 cm',colors:[{n:'Natural',h:'#C9A46A'},{n:'Oscuro',h:'#7A5A3A'}],desc:'Tejido artesanal que proyecta sombras suaves. Incluye florón y cable textil.',featured:false,active:true,order:16}
+];
+const DEFAULT_CONFIG = {
+  storeName:'Nogal', tagline:'Muebles hechos para quedarse',
+  whatsapp:'', email:'', phone:'', address:'', hours:'Lun a Vie 10–19 h · Sáb 10–14 h',
+  bank:'', cardFee:0, cashDisc:0, shipMvd:990, shipInt:1890, freeFrom:30000, warranty:'1 año',
+  coupons:[{code:'BIENVENIDO10',type:'pct',value:10,active:true}]
+};
+
+/* ================= Utilidades ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt = n => '$ ' + Math.round(Number(n)||0).toLocaleString('es-UY');
+const num = v => { const n = Number(String(v).replace(/[^\d.-]/g,'')); return isFinite(n) ? n : 0; };
+const LS = {
+  get(k,d){ try{ const v = localStorage.getItem('nogal_'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem('nogal_'+k, JSON.stringify(v)); }catch(e){} }
+};
+function shade(hex, p){
+  let h = String(hex||'#999').replace('#',''); if(h.length===3) h=h.split('').map(x=>x+x).join('');
+  const n = parseInt(h,16); if(isNaN(n)) return hex;
+  let r=n>>16, g=(n>>8)&255, b=n&255;
+  const f = v => Math.max(0, Math.min(255, Math.round(p<0 ? v*(1+p/100) : v+(255-v)*(p/100))));
+  return '#'+[f(r),f(g),f(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+function safeColor(c){ return /^#[0-9a-fA-F]{3,8}$/.test(String(c)) ? c : '#B9A88F'; }
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('on'),2600); }
+function waDigits(p){ let d=String(p||'').replace(/\D/g,''); if(d.startsWith('0')) d='598'+d.slice(1); else if(d.length===8 && d.startsWith('9')) d='598'+d; return d; }
+
+/* ================= Ilustraciones ================= */
+function art(type, color, bg, bare){
+  const c = safeColor(color), W='#B07A4F', Wd='#8A5A38', D='#2B2620', L=shade(c,14), K=shade(c,-14);
+  let g='';
+  switch(type){
+  case 'sofa': g=`
+    <rect x="80" y="204" width="9" height="34" rx="3" fill="${Wd}"/><rect x="311" y="204" width="9" height="34" rx="3" fill="${Wd}"/>
+    <rect x="82" y="104" width="236" height="84" rx="24" fill="${K}"/>
+    <rect x="60" y="150" width="280" height="60" rx="18" fill="${c}"/>
+    <rect x="48" y="128" width="44" height="84" rx="20" fill="${K}"/><rect x="308" y="128" width="44" height="84" rx="20" fill="${K}"/>
+    <rect x="96" y="118" width="100" height="44" rx="16" fill="${c}"/><rect x="204" y="118" width="100" height="44" rx="16" fill="${c}"/>
+    <rect x="92" y="156" width="106" height="28" rx="12" fill="${L}"/><rect x="202" y="156" width="106" height="28" rx="12" fill="${L}"/>
+    <rect x="236" y="124" width="46" height="40" rx="12" fill="#EFE3CF" transform="rotate(-10 259 144)"/>`; break;
+  case 'armchair': g=`
+    <path d="M150 206 L140 238" stroke="${Wd}" stroke-width="8" stroke-linecap="round"/><path d="M250 206 L260 238" stroke="${Wd}" stroke-width="8" stroke-linecap="round"/>
+    <rect x="138" y="88" width="124" height="104" rx="40" fill="${K}"/>
+    <rect x="122" y="152" width="156" height="58" rx="22" fill="${c}"/>
+    <rect x="112" y="128" width="36" height="80" rx="18" fill="${K}"/><rect x="252" y="128" width="36" height="80" rx="18" fill="${K}"/>
+    <rect x="146" y="150" width="108" height="30" rx="14" fill="${L}"/>`; break;
+  case 'coffeetable': g=`
+    <rect x="128" y="176" width="9" height="56" rx="3" fill="${Wd}"/><rect x="262" y="176" width="9" height="56" rx="3" fill="${Wd}"/>
+    <rect x="106" y="180" width="11" height="58" rx="3" fill="${c}"/><rect x="283" y="180" width="11" height="58" rx="3" fill="${c}"/>
+    <rect x="90" y="166" width="220" height="18" rx="8" fill="${c}"/>
+    <rect x="114" y="212" width="172" height="8" rx="3" fill="${K}"/>
+    <rect x="150" y="128" width="26" height="38" rx="10" fill="#E9DFCF"/><path d="M163 128 C160 108 150 98 140 92 M163 128 C166 106 178 98 188 94" stroke="${'#5F6B4E'}" stroke-width="3" fill="none"/>
+    <rect x="214" y="152" width="58" height="7" rx="2" fill="#B5552B"/><rect x="218" y="145" width="50" height="7" rx="2" fill="#3E4A5B"/>`; break;
+  case 'table': g=`
+    <path d="M92 146 L84 238" stroke="${K}" stroke-width="12" stroke-linecap="round"/><path d="M308 146 L316 238" stroke="${K}" stroke-width="12" stroke-linecap="round"/>
+    <path d="M126 146 L132 226" stroke="${shade(c,-28)}" stroke-width="9" stroke-linecap="round"/><path d="M274 146 L268 226" stroke="${shade(c,-28)}" stroke-width="9" stroke-linecap="round"/>
+    <rect x="56" y="128" width="288" height="18" rx="6" fill="${c}"/>
+    <rect x="76" y="146" width="248" height="9" fill="${K}"/>
+    <path d="M168 128 a32 14 0 0 0 64 0 z" fill="#EFE3CF"/><circle cx="188" cy="120" r="9" fill="#C8963E"/><circle cx="205" cy="118" r="9" fill="#B5552B"/><circle cx="198" cy="110" r="8" fill="#7E8C6E"/>`; break;
+  case 'chair': g=`
+    <path d="M166 180 L158 238" stroke="${W}" stroke-width="7" stroke-linecap="round"/><path d="M234 180 L242 238" stroke="${W}" stroke-width="7" stroke-linecap="round"/>
+    <path d="M176 180 L180 228" stroke="${Wd}" stroke-width="6" stroke-linecap="round"/><path d="M224 180 L220 228" stroke="${Wd}" stroke-width="6" stroke-linecap="round"/>
+    <path d="M166 172 L170 104" stroke="${W}" stroke-width="7" stroke-linecap="round"/><path d="M234 172 L230 104" stroke="${W}" stroke-width="7" stroke-linecap="round"/>
+    <rect x="160" y="88" width="80" height="44" rx="16" fill="${c}"/>
+    <rect x="148" y="164" width="104" height="20" rx="8" fill="${c}"/><rect x="148" y="164" width="104" height="8" rx="4" fill="${L}"/>`; break;
+  case 'sideboard': g=`
+    <path d="M80 214 L76 238" stroke="${Wd}" stroke-width="7" stroke-linecap="round"/><path d="M320 214 L324 238" stroke="${Wd}" stroke-width="7" stroke-linecap="round"/>
+    <rect x="60" y="118" width="280" height="98" rx="6" fill="${W}"/>
+    <rect x="70" y="128" width="84" height="78" rx="3" fill="${c}"/><rect x="158" y="128" width="84" height="78" rx="3" fill="${K}"/><rect x="246" y="128" width="84" height="78" rx="3" fill="${c}"/>
+    <rect x="146" y="160" width="4" height="16" rx="2" fill="${D}"/><rect x="236" y="160" width="4" height="16" rx="2" fill="${D}"/><rect x="250" y="160" width="4" height="16" rx="2" fill="${D}"/>
+    <rect x="96" y="84" width="22" height="34" rx="8" fill="#EFE3CF"/><circle cx="280" cy="96" r="22" fill="#E7DCCB" stroke="${Wd}" stroke-width="3"/><rect x="190" y="104" width="44" height="14" rx="3" fill="#3E4A5B"/>`; break;
+  case 'bed': g=`
+    <rect x="66" y="214" width="10" height="24" rx="3" fill="${Wd}"/><rect x="324" y="214" width="10" height="24" rx="3" fill="${Wd}"/>
+    <rect x="72" y="84" width="256" height="110" rx="20" fill="${c}"/>
+    <rect x="82" y="94" width="236" height="10" rx="5" fill="${L}"/>
+    <rect x="54" y="192" width="292" height="24" rx="6" fill="${W}"/>
+    <rect x="58" y="160" width="284" height="38" rx="10" fill="#F5EFE5"/>
+    <rect x="96" y="138" width="90" height="30" rx="13" fill="#FFFDF9"/><rect x="214" y="138" width="90" height="30" rx="13" fill="#FFFDF9"/>
+    <rect x="160" y="166" width="182" height="40" rx="10" fill="${L}"/><rect x="160" y="176" width="182" height="5" fill="${c}" opacity=".5"/>`; break;
+  case 'nightstand': g=`
+    <path d="M150 214 L146 238" stroke="${Wd}" stroke-width="7" stroke-linecap="round"/><path d="M250 214 L254 238" stroke="${Wd}" stroke-width="7" stroke-linecap="round"/>
+    <rect x="134" y="134" width="132" height="82" rx="8" fill="${W}"/>
+    <rect x="144" y="144" width="112" height="28" rx="4" fill="${c}"/><rect x="144" y="178" width="112" height="28" rx="4" fill="${c}"/>
+    <rect x="190" y="155" width="20" height="5" rx="2.5" fill="${D}"/><rect x="190" y="189" width="20" height="5" rx="2.5" fill="${D}"/>
+    <rect x="196" y="104" width="8" height="30" fill="${D}"/><path d="M176 104 L224 104 L214 70 L186 70 Z" fill="#EFE3CF"/><ellipse cx="200" cy="134" rx="18" ry="3" fill="${D}"/>`; break;
+  case 'wardrobe': g=`
+    <rect x="110" y="222" width="8" height="16" rx="2" fill="${Wd}"/><rect x="282" y="222" width="8" height="16" rx="2" fill="${Wd}"/>
+    <rect x="98" y="36" width="204" height="188" rx="6" fill="${K}"/>
+    <rect x="106" y="44" width="60" height="172" rx="3" fill="${c}"/><rect x="170" y="44" width="60" height="172" rx="3" fill="${c}"/><rect x="234" y="44" width="60" height="172" rx="3" fill="${c}"/>
+    <rect x="157" y="118" width="4" height="26" rx="2" fill="${D}"/><rect x="175" y="118" width="4" height="26" rx="2" fill="${D}"/><rect x="239" y="118" width="4" height="26" rx="2" fill="${D}"/>`; break;
+  case 'desk': g=`
+    <path d="M86 144 L80 238 M86 144 L98 238" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M314 144 L320 238 M314 144 L302 238" stroke="${D}" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <rect x="66" y="130" width="268" height="15" rx="4" fill="${W}"/>
+    <rect x="236" y="145" width="74" height="40" rx="4" fill="${c}"/><rect x="262" y="162" width="22" height="5" rx="2.5" fill="${D}"/>
+    <path d="M140 130 L150 92 L214 92 L206 130 Z" fill="${D}"/><rect x="132" y="127" width="92" height="5" rx="2" fill="#555"/>
+    <rect x="262" y="104" width="22" height="26" rx="6" fill="#EFE3CF"/><path d="M273 104 C268 86 258 80 252 78 M273 104 C278 88 290 82 296 82 M273 104 L273 80" stroke="#5F6B4E" stroke-width="3" fill="none"/>`; break;
+  case 'officechair': g=`
+    <path d="M200 196 L200 222 M200 222 L150 230 M200 222 L250 230 M200 222 L176 236 M200 222 L224 236" stroke="${D}" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="150" cy="233" r="6" fill="#555"/><circle cx="250" cy="233" r="6" fill="#555"/><circle cx="176" cy="238" r="5" fill="#555"/><circle cx="224" cy="238" r="5" fill="#555"/>
+    <rect x="194" y="150" width="12" height="50" fill="${D}"/>
+    <rect x="152" y="58" width="96" height="100" rx="34" fill="${c}"/><rect x="164" y="70" width="72" height="76" rx="26" fill="${L}" opacity=".5"/>
+    <rect x="140" y="164" width="120" height="26" rx="13" fill="${K}"/>
+    <path d="M140 172 L140 146 L160 146" stroke="${D}" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M260 172 L260 146 L240 146" stroke="${D}" stroke-width="6" fill="none" stroke-linecap="round"/>`; break;
+  case 'shelf': g=`
+    <rect x="112" y="34" width="176" height="204" rx="4" fill="${c}"/>
+    <rect x="122" y="44" width="156" height="38" fill="${K}"/><rect x="122" y="88" width="156" height="44" fill="${K}"/><rect x="122" y="138" width="156" height="44" fill="${K}"/><rect x="122" y="188" width="156" height="42" fill="${K}"/>
+    <rect x="130" y="54" width="10" height="28" fill="#EFE3CF"/><rect x="142" y="58" width="9" height="24" fill="#3E4A5B"/><rect x="153" y="52" width="11" height="30" fill="#C8963E"/><circle cx="240" cy="70" r="11" fill="#7E8C6E"/>
+    <rect x="200" y="98" width="10" height="34" fill="#B5552B"/><rect x="212" y="102" width="9" height="30" fill="#EFE3CF"/><rect x="223" y="96" width="12" height="36" fill="#2B2620"/><rect x="140" y="112" width="26" height="20" rx="6" fill="#E9DFCF"/>
+    <rect x="132" y="148" width="11" height="34" fill="#5F6B4E"/><rect x="145" y="152" width="9" height="30" fill="#C8963E"/><rect x="230" y="160" width="34" height="22" rx="4" fill="#EFE3CF"/>
+    <rect x="160" y="200" width="70" height="8" fill="#3E4A5B"/><rect x="164" y="208" width="62" height="8" fill="#B5552B"/><rect x="160" y="216" width="70" height="8" fill="#EFE3CF"/>`; break;
+  case 'floorlamp': g=`
+    <ellipse cx="300" cy="186" rx="80" ry="40" fill="#FFF3C8" opacity=".55"/>
+    <ellipse cx="128" cy="234" rx="34" ry="8" fill="#5a5048"/>
+    <path d="M128 232 L128 120 Q128 54 210 52 Q284 52 296 112" stroke="${D}" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M266 110 Q296 72 326 110 Z" fill="${c}"/><ellipse cx="296" cy="112" rx="22" ry="5" fill="#FFF3C8"/>`; break;
+  case 'pendant': g=`
+    <ellipse cx="200" cy="220" rx="110" ry="18" fill="#FFF3C8" opacity=".6"/>
+    <line x1="200" y1="0" x2="200" y2="96" stroke="${D}" stroke-width="3"/>
+    <path d="M128 176 Q132 96 200 92 Q268 96 272 176 Z" fill="${c}"/>
+    <path d="M140 140 Q200 128 260 140 M134 158 Q200 146 266 158 M150 118 Q200 108 250 118" stroke="${K}" stroke-width="3" fill="none"/>
+    <path d="M168 94 L156 176 M200 92 L200 176 M232 94 L244 176" stroke="${K}" stroke-width="2.5" fill="none"/>
+    <ellipse cx="200" cy="176" rx="72" ry="9" fill="#FFF3C8"/>`; break;
+  default: g=`<rect x="120" y="100" width="160" height="120" rx="12" fill="${c}"/>`;
+  }
+  if(bare) return `<svg viewBox="40 30 320 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><ellipse cx="200" cy="240" rx="160" ry="9" fill="rgba(0,0,0,.22)"/>${g}</svg>`;
+  return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="300" fill="${bg||'#E7EAE3'}"/><rect y="238" width="400" height="62" fill="${shade(bg||'#E7EAE3',-4)}"/><ellipse cx="200" cy="240" rx="150" ry="8" fill="rgba(0,0,0,.08)"/>${g}</svg>`;
+}
+function media(p, ci){
+  if(p.image && /^data:image\//.test(p.image)) return `<img src="${esc(p.image)}" alt="${esc(p.name)}">`;
+  const col = (p.colors && p.colors[ci||0]) ? p.colors[ci||0].h : '#C9B79C';
+  return art(p.type, col);
+}
+
+/* ================= Estado ================= */
+const S = {
+  db:null, user:null, uid:null, isAdmin:false, dbState:'connecting',
+  dbProducts:null, config:{...DEFAULT_CONFIG},
+  cart: LS.get('cart', []), favs: LS.get('favs', []), localOrders: LS.get('orders', []),
+  myOrders:[], allOrders:[], adminTab:'resumen', adminQ:'', adminStatus:'todos',
+  f:{q:'', cat:'todas', sort:'destacados', max:0, mat:''},
+  sel:{}, qty:1, coupon: LS.get('coupon',''), form: LS.get('customer', {name:'',email:'',phone:'',doc:'',delivery:'envio',dept:'Montevideo',city:'',addr:'',notes:'',pay:'transferencia'}),
+  errors:{}, lastOrder: LS.get('lastOrder', null), placing:false
+};
+const products = () => (S.dbProducts && S.dbProducts.length ? S.dbProducts : BASE_PRODUCTS).slice().sort((a,b)=>(a.order||0)-(b.order||0));
+const visible = () => products().filter(p => p.active !== false);
+const byId = id => products().find(p => p.id === id);
+const catName = id => (CATS.find(c=>c.id===id)||{n:id}).n;
+const cfg = () => S.config;
+
+/* ================= Carrito ================= */
+function saveCart(){ LS.set('cart', S.cart); updateBadges(); }
+function addToCart(id, ci, qty){
+  const p = byId(id); if(!p) return;
+  const key = id+'|'+(ci||0);
+  const line = S.cart.find(l=>l.key===key);
+  const inCart = S.cart.filter(l=>l.id===id).reduce((a,l)=>a+l.qty,0);
+  const stock = Number(p.stock)||0;
+  if(inCart + qty > stock){ toast(stock ? `Solo quedan ${stock} unidades` : 'Sin stock por ahora'); return; }
+  if(line) line.qty += qty; else S.cart.push({key, id, ci:ci||0, qty});
+  saveCart(); renderCart(); openDrawer('cart');
+}
+function cartLines(){
+  return S.cart.map(l => { const p = byId(l.id); if(!p || p.active===false) return null;
+    const col = (p.colors||[])[l.ci] || {n:'', h:'#ccc'};
+    return {...l, p, col, total:p.price*l.qty}; }).filter(Boolean);
+}
+function findCoupon(code){
+  code = String(code||'').trim().toUpperCase(); if(!code) return null;
+  return (cfg().coupons||[]).find(c => c.active !== false && String(c.code).toUpperCase() === code) || null;
+}
+function totals(form){
+  const lines = cartLines();
+  const sub = lines.reduce((a,l)=>a+l.total,0);
+  const cp = findCoupon(S.coupon);
+  let disc = 0;
+  if(cp) disc = cp.type==='pct' ? Math.round(sub * Math.min(100,Number(cp.value)||0)/100) : Math.min(sub, Number(cp.value)||0);
+  const after = sub - disc;
+  const f = form || S.form; const c = cfg();
+  let ship = 0, shipLabel = 'Retiro en showroom';
+  if(f.delivery !== 'retiro'){
+    if(after >= (Number(c.freeFrom)||Infinity) && Number(c.freeFrom)>0){ ship = 0; shipLabel = 'Envío gratis'; }
+    else { ship = f.dept==='Montevideo' ? Number(c.shipMvd)||0 : Number(c.shipInt)||0; shipLabel = 'Envío a '+(f.dept||'domicilio'); }
+  }
+  const base = after + ship; let adj = 0, adjLabel = '';
+  if(f.pay==='tarjeta' && Number(c.cardFee)>0){ adj = Math.round(base*Number(c.cardFee)/100); adjLabel = `Recargo tarjeta (${Number(c.cardFee)}%)`; }
+  else if((f.pay==='transferencia'||f.pay==='efectivo') && Number(c.cashDisc)>0){ adj = -Math.round(base*Number(c.cashDisc)/100); adjLabel = `Descuento ${f.pay==='transferencia'?'transferencia':'efectivo'} (${Number(c.cashDisc)}%)`; }
+  return {lines, sub, cp, disc, ship, shipLabel, adj, adjLabel, total: base + adj, count: lines.reduce((a,l)=>a+l.qty,0)};
+}
+
+/* ================= Render: layout ================= */
+function updateBadges(){
+  const n = S.cart.reduce((a,l)=>a+l.qty,0);
+  const cc=$('#cartcount'); cc.textContent=n; cc.classList.toggle('hidden', !n);
+  const fc=$('#favcount'); fc.textContent=S.favs.length; fc.classList.toggle('hidden', !S.favs.length);
+}
+function renderChrome(){
+  const c = cfg(); const h = currentHash();
+  $('#brand').textContent = c.storeName || 'Nogal';
+  $('#f-brand').textContent = c.storeName || 'Nogal';
+  $('#f-big').textContent = c.storeName || 'Nogal';
+  document.title = (c.storeName||'Nogal') + ' — Muebles de diseño';
+  $('#topbar').textContent = Number(c.freeFrom)>0 ? 'Envío gratis a todo Uruguay desde ' + fmt(c.freeFrom) : 'Hacemos envíos a todo Uruguay';
+  $('#mainnav').innerHTML = `<a href="#tienda" class="${h==='tienda'?'on':''}">Todo</a>` + CATS.map(k=>`<a href="#cat-${k.id}" class="${h==='cat-'+k.id?'on':''}">${k.n}</a>`).join('');
+  $('#f-cats').innerHTML = CATS.map(k=>`<a href="#cat-${k.id}">${k.n}</a>`).join('');
+  const ct = [];
+  if(c.whatsapp) ct.push(`<a href="https://wa.me/${waDigits(c.whatsapp)}" target="_blank" rel="noopener">WhatsApp ${esc(c.whatsapp)}</a>`);
+  if(c.phone) ct.push(`<span style="display:block;padding:3px 0">Tel. ${esc(c.phone)}</span>`);
+  if(c.email) ct.push(`<span style="display:block;padding:3px 0">${esc(c.email)}</span>`);
+  if(c.address) ct.push(`<span style="display:block;padding:3px 0">${esc(c.address)}</span>`);
+  if(c.hours) ct.push(`<span style="display:block;padding:3px 0">${esc(c.hours)}</span>`);
+  $('#f-contact').innerHTML = ct.join('') || '<span class="small">Configurá tus datos de contacto en el panel.</span>';
+  $('#f-copy').textContent = '© ' + new Date().getFullYear() + ' ' + (c.storeName||'Nogal') + ', Montevideo';
+  let note = '';
+  if(S.dbState==='offline') note = 'No se pudo cargar el catálogo actualizado. Estás viendo productos de muestra.';
+  if(S.dbState==='slow') note = 'Conectando con la tienda… los datos pueden no estar actualizados.';
+  $('#sysnote').innerHTML = note ? `<div class="sysnote">${note}</div>` : '';
+  updateBadges();
+}
+
+/* ================= Vistas ================= */
+function card(p){
+  const out = !(Number(p.stock)>0);
+  const off = p.compare > p.price ? Math.round((1-p.price/p.compare)*100) : 0;
+  const fav = S.favs.includes(p.id);
+  return `<article class="card">
+    <div style="position:relative">
+      ${out ? '<span class="tag out">Sin stock</span>' : off ? `<span class="tag">−${off}%</span>` : ''}
+      <button class="fav ${fav?'on':''}" data-a="fav" data-id="${esc(p.id)}" aria-label="Guardar en favoritos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+      <a class="media" href="#p-${esc(p.id)}" aria-label="${esc(p.name)}">${media(p,0)}</a>
+      <button class="plus" data-a="quickadd" data-id="${esc(p.id)}" aria-label="Agregar ${esc(p.name)} al carrito" ${out?'disabled':''}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+    </div>
+    <div class="body">
+      <a class="nm" href="#p-${esc(p.id)}">${esc(p.name)}</a>
+      <span class="mt">${esc(p.material||catName(p.cat))}</span>
+      <div class="price"><b>${fmt(p.price)}</b>${p.compare>p.price?`<s>${fmt(p.compare)}</s>`:''}</div>
+      ${(p.colors||[]).length>1 ? `<div class="swatches" aria-label="${p.colors.length} colores">${p.colors.map(c=>`<span class="sw" style="background:${safeColor(c.h)}" title="${esc(c.n)}"></span>`).join('')}</div>`:''}
+    </div></article>`;
+}
+function heroProduct(){ const v = visible(); return v.find(p=>p.featured && p.type==='sofa') || v.find(p=>p.featured) || v[0]; }
+function heroPick(){
+  const p = heroProduct(); if(!p) return '';
+  const ci = Math.min(S.heroCi||0, Math.max(0,(p.colors||[]).length-1));
+  return `<div class="nm"><b>${esc(p.name)}</b><span>${fmt(p.price)}${(p.colors||[])[ci]?', en '+esc(p.colors[ci].n.toLowerCase()):''}</span></div>
+    ${(p.colors||[]).length>1?`<div class="hsw" role="group" aria-label="Color">${p.colors.map((c,i)=>`<button data-a="herocolor" data-i="${i}" class="${i===ci?'on':''}" style="background:${safeColor(c.h)}" aria-label="${esc(c.n)}" aria-pressed="${i===ci}"></button>`).join('')}</div>`:''}
+    <button class="btn btn-p btn-sm" data-a="heroadd" ${(Number(p.stock)||0)<=0?'disabled':''}>Agregar</button>`;
+}
+function heroStage(){
+  const p = heroProduct(); if(!p) return '';
+  const ci = Math.min(S.heroCi||0, Math.max(0,(p.colors||[]).length-1));
+  if(p.image && /^data:image\//.test(p.image)) return `<img src="${esc(p.image)}" alt="${esc(p.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
+  return art(p.type, (p.colors[ci]||{}).h, null, true);
+}
+function viewHome(){
+  const feat = visible().filter(p=>p.featured).slice(0,8);
+  const deals = visible().filter(p=>p.compare>p.price).slice(0,4);
+  const c = cfg();
+  return `<div class="wrap">
+  <section class="hero">
+    <div class="hero-copy">
+      <h1>${esc(c.tagline||'Muebles hechos para quedarse')}</h1>
+      <div><p>Madera maciza y telas nobles. Elegí el color, te lo llevamos a tu casa y pagás como prefieras.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-light" href="#tienda">Ver catálogo</a></div></div>
+    </div>
+    <div class="hero-stage"><div id="herostage">${heroStage()}</div><div class="hero-pick" id="heropick">${heroPick()}</div></div>
+  </section>
+  <div class="perks">
+    ${perk('<path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>','Envío a todo el país', Number(c.freeFrom)>0?'Gratis desde '+fmt(c.freeFrom):'Coordinamos día y hora')}
+    ${perk('<path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="m9 12 2 2 4-4"/>','Garantía de '+esc(c.warranty||'1 año'),'En estructura y herrajes')}
+    ${perk('<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/>','Pagás como quieras','Transferencia, efectivo o tarjeta')}
+    ${perk('<path d="M4 12a8 8 0 1 1 3 6.2L4 20l1-3.4A8 8 0 0 1 4 12z"/>','Te asesoramos','Por WhatsApp, antes y después')}
+  </div>
+  <section class="sec"><div class="sec-h"><h2>Por ambiente</h2><a class="link" href="#tienda">Ver todo</a></div>
+    <div class="cats">${CATS.map(k=>`<a class="cat" href="#cat-${k.id}"><div class="ca">${art(k.art,k.c)}</div><b>${k.n}</b></a>`).join('')}</div></section>
+  ${feat.length?`<section class="sec"><div class="sec-h"><h2>Los más elegidos</h2><a class="link" href="#tienda">Ver catálogo</a></div><div class="grid">${feat.map(card).join('')}</div></section>`:''}
+  ${deals.length?`<section class="sec"><div class="sec-h"><h2>Con precio especial</h2></div><div class="grid">${deals.map(card).join('')}</div></section>`:''}
+  </div>`;
+}
+function perk(path,t,s){ return `<div class="perk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round">${path}</svg><div><b>${t}</b><span>${s}</span></div></div>`; }
+
+function filtered(){
+  const f = S.f; const q = f.q.trim().toLowerCase();
+  let list = visible().filter(p =>
+    (f.cat==='todas' || p.cat===f.cat) &&
+    (!q || [p.name,p.material,catName(p.cat),p.desc].join(' ').toLowerCase().includes(q)) &&
+    (!f.max || p.price <= f.max) &&
+    (!f.mat || String(p.material||'').toLowerCase().includes(f.mat)));
+  const s = f.sort;
+  if(s==='precio-asc') list.sort((a,b)=>a.price-b.price);
+  else if(s==='precio-desc') list.sort((a,b)=>b.price-a.price);
+  else if(s==='nombre') list.sort((a,b)=>a.name.localeCompare(b.name,'es'));
+  else if(s==='ofertas') list.sort((a,b)=>((b.compare>b.price)-(a.compare>a.price)));
+  else list.sort((a,b)=>(b.featured?1:0)-(a.featured?1:0) || (a.order||0)-(b.order||0));
+  return list;
+}
+function viewShop(){
+  const f = S.f;
+  const title = f.cat==='todas' ? 'Catálogo' : catName(f.cat);
+  return `<div class="wrap">
+    <div class="shop-head"><div class="crumbs" style="padding:0 0 6px"><a href="#inicio">Inicio</a> / ${esc(title)}</div><h1>${esc(title)}</h1></div>
+    <div class="chips"><a class="chip ${f.cat==='todas'?'on':''}" href="#tienda">Todo</a>${CATS.map(k=>`<a class="chip ${f.cat===k.id?'on':''}" href="#cat-${k.id}">${k.n}</a>`).join('')}</div>
+    <div class="filters">
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="q" type="search" placeholder="Buscar sofá, roble, lámpara…" value="${esc(f.q)}"></label>
+      <select class="sel" id="fmax"><option value="0">Cualquier precio</option>${[5000,10000,20000,35000,50000].map(v=>`<option value="${v}" ${f.max==v?'selected':''}>Hasta ${fmt(v)}</option>`).join('')}</select>
+      <select class="sel" id="fmat"><option value="">Todos los materiales</option>${[['roble','Roble'],['paraíso','Paraíso'],['pino','Pino'],['lino','Lino'],['lana','Lana / bouclé'],['fibra','Fibra natural'],['acero','Metal']].map(([v,n])=>`<option value="${v}" ${f.mat===v?'selected':''}>${n}</option>`).join('')}</select>
+      <select class="sel" id="fsort">${[['destacados','Destacados'],['precio-asc','Menor precio'],['precio-desc','Mayor precio'],['ofertas','Ofertas primero'],['nombre','Nombre A–Z']].map(([v,n])=>`<option value="${v}" ${f.sort===v?'selected':''}>${n}</option>`).join('')}</select>
+    </div>
+    <div id="results"></div>
+  </div>`;
+}
+function renderResults(){
+  const el = $('#results'); if(!el) return;
+  const list = filtered();
+  el.innerHTML = `<p class="muted small" style="margin:0 0 12px">${list.length} producto${list.length===1?'':'s'}</p>` +
+    (list.length ? `<div class="grid">${list.map(card).join('')}</div>` :
+    `<div class="empty"><h3>No encontramos productos</h3><p>Probá con otra búsqueda o quitá algún filtro.</p><button class="btn btn-g" data-a="clearf">Limpiar filtros</button></div>`);
+}
+function viewProduct(id){
+  const p = byId(id);
+  if(!p || p.active===false) return `<div class="wrap empty"><h3>Producto no disponible</h3><p>Puede que ya no esté en el catálogo.</p><a class="btn btn-p" href="#tienda">Volver a la tienda</a></div>`;
+  const ci = Math.min(S.sel[p.id]||0, Math.max(0,(p.colors||[]).length-1));
+  const stock = Number(p.stock)||0;
+  const off = p.compare>p.price ? Math.round((1-p.price/p.compare)*100) : 0;
+  const rel = visible().filter(x=>x.cat===p.cat && x.id!==p.id).slice(0,4);
+  const fav = S.favs.includes(p.id);
+  const c = cfg();
+  document.body.classList.add('has-sticky');
+  return `<div class="wrap">
+    <div class="crumbs"><a href="#inicio">Inicio</a> / <a href="#cat-${esc(p.cat)}">${esc(catName(p.cat))}</a> / ${esc(p.name)}</div>
+    <div class="pd">
+      <div class="pd-media" id="pdmedia">${media(p,ci)}</div>
+      <div>
+        <div class="eyebrow" style="margin:0">${esc(catName(p.cat))}</div>
+        <h1>${esc(p.name)}</h1>
+        <div class="price"><b>${fmt(p.price)}</b>${off?`<s>${fmt(p.compare)}</s><span class="save">Ahorrás ${fmt(p.compare-p.price)}</span>`:''}</div>
+        <div class="stock"><span class="dot ${stock<=0?'out':stock<=3?'low':''}"></span>${stock<=0?'Sin stock — consultanos por WhatsApp':stock<=3?`¡Últimas ${stock} unidades!`:'En stock · entrega en 3 a 7 días hábiles'}</div>
+        ${(p.colors||[]).length ? `<div class="opt-l">Color: <span class="muted" style="font-weight:400">${esc(p.colors[ci].n)}</span></div>
+        <div class="colors">${p.colors.map((c,i)=>`<button class="cbtn ${i===ci?'on':''}" data-a="color" data-id="${esc(p.id)}" data-i="${i}"><span class="sw" style="background:${safeColor(c.h)}"></span>${esc(c.n)}</button>`).join('')}</div>`:''}
+        <div class="buy">
+          <div class="qty"><button data-a="pqty" data-d="-1" aria-label="Menos">−</button><span id="pq">${S.qty}</span><button data-a="pqty" data-d="1" aria-label="Más">+</button></div>
+          <button class="btn btn-p" data-a="add" data-id="${esc(p.id)}" ${stock<=0?'disabled':''}>Agregar al carrito</button>
+          <button class="iconbtn fav ${fav?'on':''}" style="position:static;border:1px solid var(--line);width:46px;height:46px;background:var(--paper)" data-a="fav" data-id="${esc(p.id)}" aria-label="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
+        </div>
+        ${c.whatsapp?`<a class="btn btn-g btn-block" href="https://wa.me/${waDigits(c.whatsapp)}?text=${encodeURIComponent('Hola! Quisiera consultar por: '+p.name)}" target="_blank" rel="noopener">Consultar por WhatsApp</a>`:''}
+        <div class="assure"><div><b>Envío</b><br><span class="muted">${Number(c.freeFrom)>0?'Gratis desde '+fmt(c.freeFrom):'A todo el país'}</span></div><div><b>Garantía</b><br><span class="muted">${esc(c.warranty||'1 año')}</span></div></div>
+        <p class="desc">${esc(p.desc)}</p>
+        <div class="specs"><div><span>Medidas</span><b>${esc(p.dims||'—')}</b></div><div><span>Material</span><b>${esc(p.material||'—')}</b></div><div><span>Tipo</span><b>${esc(ART_TYPES[p.type]||'Mueble')}</b></div><div><span>Código</span><b>${esc(p.id.toUpperCase())}</b></div></div>
+      </div>
+    </div>
+    ${rel.length?`<section class="sec"><div class="sec-h"><h2>También te puede gustar</h2></div><div class="grid">${rel.map(card).join('')}</div></section>`:''}
+  </div>
+  <div class="sticky-buy"><div><div class="small muted">${esc(p.name)}</div><b>${fmt(p.price)}</b></div><button class="btn btn-p" data-a="add" data-id="${esc(p.id)}" ${stock<=0?'disabled':''}>Agregar</button></div>`;
+}
+function viewFavs(){
+  const list = S.favs.map(byId).filter(p=>p && p.active!==false);
+  return `<div class="wrap"><div class="shop-head"><h1>Favoritos</h1></div>${list.length?`<div class="grid" style="margin-top:16px">${list.map(card).join('')}</div>`:`<div class="empty"><h3>Todavía no guardaste nada</h3><p>Tocá el corazón en cualquier producto para guardarlo acá.</p><a class="btn btn-p" href="#tienda">Explorar catálogo</a></div>`}</div>`;
+}
+function viewShipping(){
+  const c = cfg();
+  return `<div class="wrap" style="max-width:760px"><div class="shop-head"><h1>Envíos, cambios y garantía</h1></div>
+  <div class="panel" style="margin-top:16px"><h3>Envíos</h3><p>Montevideo: ${fmt(c.shipMvd)} · Interior: ${fmt(c.shipInt)}${Number(c.freeFrom)>0?` · <b>Gratis en compras desde ${fmt(c.freeFrom)}</b>`:''}.</p><p class="muted">Entregamos de 3 a 7 días hábiles en Montevideo y de 5 a 10 en el interior. Te contactamos para coordinar día y franja horaria. También podés retirar sin costo en nuestro showroom${c.address?' ('+esc(c.address)+')':''}.</p></div>
+  <div class="panel"><h3>Cambios y devoluciones</h3><p class="muted">Tenés 10 días desde la entrega para arrepentirte de la compra (Ley 17.250 de Defensa del Consumidor, para compras a distancia). El producto debe estar sin uso y en su embalaje.</p></div>
+  <div class="panel"><h3>Garantía</h3><p class="muted">Todos nuestros muebles tienen ${esc(c.warranty||'1 año')} de garantía en estructura y herrajes. Escribinos con tu número de pedido y una foto.</p></div></div>`;
+}
+
+/* ===== Checkout ===== */
+function viewCheckout(){
+  const t = totals(); const f = S.form; const e = S.errors; const c = cfg();
+  if(!t.lines.length) return `<div class="wrap empty"><h3>Tu carrito está vacío</h3><p>Agregá productos para continuar.</p><a class="btn btn-p" href="#tienda">Ir a la tienda</a></div>`;
+  const fld = (k, label, type='text', extra='', cls='') => `<label class="f ${cls} ${e[k]?'bad':''}">${label}<input name="${k}" type="${type}" value="${esc(f[k])}" ${extra}>${e[k]?`<span class="er">${e[k]}</span>`:''}</label>`;
+  const shipMvd = Number(c.shipMvd)||0, shipInt = Number(c.shipInt)||0;
+  return `<div class="wrap"><div class="shop-head"><div class="crumbs" style="padding:0 0 6px"><a href="#inicio">Inicio</a> / Finalizar compra</div><h1>Finalizar compra</h1></div>
+  <form class="co" id="coform" novalidate>
+    <div>
+      <div class="panel"><h3>1. Tus datos</h3><div class="fg">
+        ${fld('name','Nombre y apellido','text','autocomplete="name"','full')}
+        ${fld('email','Email','email','autocomplete="email"')}
+        ${fld('phone','Celular','tel','autocomplete="tel" placeholder="09X XXX XXX"')}
+        ${fld('doc','Cédula (opcional, para la factura)','text','','full')}
+      </div></div>
+      <div class="panel"><h3>2. Entrega</h3><div class="radios">
+        <label class="radio ${f.delivery!=='retiro'?'on':''}"><input type="radio" name="delivery" value="envio" ${f.delivery!=='retiro'?'checked':''}><div><b>Envío a domicilio</b><span>Montevideo ${fmt(shipMvd)} · Interior ${fmt(shipInt)}${Number(c.freeFrom)>0?' · gratis desde '+fmt(c.freeFrom):''}</span></div></label>
+        <label class="radio ${f.delivery==='retiro'?'on':''}"><input type="radio" name="delivery" value="retiro" ${f.delivery==='retiro'?'checked':''}><div><b>Retiro en showroom</b><span>${c.address?esc(c.address):'Sin costo'}${c.hours?' · '+esc(c.hours):''}</span></div><em>Gratis</em></label>
+      </div>
+      ${f.delivery!=='retiro'?`<div class="fg" style="margin-top:14px">
+        <label class="f">Departamento<select name="dept">${DEPTOS.map(d=>`<option ${f.dept===d?'selected':''}>${d}</option>`).join('')}</select></label>
+        ${fld('city','Ciudad / barrio')}
+        ${fld('addr','Dirección (calle, número, apto.)','text','autocomplete="street-address"','full')}
+        <label class="f full">Indicaciones para la entrega (opcional)<textarea name="notes" rows="2">${esc(f.notes)}</textarea></label>
+      </div>`:''}
+      </div>
+      <div class="panel"><h3>3. Pago</h3><div class="radios">
+        ${Object.entries(PAYS).map(([k,n])=>`<label class="radio ${f.pay===k?'on':''}"><input type="radio" name="pay" value="${k}" ${f.pay===k?'checked':''}><div><b>${n}</b><span>${k==='transferencia'?'Te mostramos los datos bancarios al confirmar.':k==='efectivo'?'Pagás al recibir el pedido o al retirarlo.':'Pagás con POS al recibir o retirar, o te enviamos un link de pago.'}</span></div>${k==='tarjeta'&&Number(c.cardFee)>0?`<em>+${Number(c.cardFee)}%</em>`:k!=='tarjeta'&&Number(c.cashDisc)>0?`<em style="color:var(--ok)">−${Number(c.cashDisc)}%</em>`:''}</label>`).join('')}
+      </div></div>
+    </div>
+    <aside>
+      <div class="panel" style="position:sticky;top:80px"><h3>Resumen</h3>
+        ${t.lines.map(l=>`<div class="sumi"><div class="th">${media(l.p,l.ci)}</div><div class="n">${esc(l.p.name)}<br><span class="muted small">${esc(l.col.n)} · ${l.qty} u.</span></div><b class="small">${fmt(l.total)}</b></div>`).join('')}
+        <div class="coupon"><input id="cpin" placeholder="Cupón de descuento" value="${esc(S.coupon)}"><button type="button" class="btn btn-g btn-sm" data-a="coupon">Aplicar</button></div>
+        ${S.coupon && !t.cp ? '<p class="small" style="color:var(--err);margin:-4px 0 8px">Cupón no válido</p>':''}
+        <div class="tot"><span>Subtotal</span><span>${fmt(t.sub)}</span></div>
+        ${t.disc?`<div class="tot disc"><span>Descuento (${esc(t.cp.code)})</span><span>− ${fmt(t.disc)}</span></div>`:''}
+        <div class="tot"><span>${esc(t.shipLabel)}</span><span>${t.ship?fmt(t.ship):'Gratis'}</span></div>
+        ${t.adj?`<div class="tot ${t.adj<0?'disc':''}"><span>${esc(t.adjLabel)}</span><span>${t.adj<0?'− ':'+ '}${fmt(Math.abs(t.adj))}</span></div>`:''}
+        <div class="tot big"><span>Total</span><span>${fmt(t.total)}</span></div>
+        <p class="small muted" style="margin:6px 0 14px">Precios en pesos uruguayos, IVA incluido.</p>
+        <button class="btn btn-a btn-block" type="submit" ${S.placing?'disabled':''}>${S.placing?'Procesando…':'Confirmar pedido'}</button>
+        ${Object.keys(e).length?'<p class="small" style="color:var(--err);margin:10px 0 0">Revisá los campos marcados.</p>':''}
+      </div>
+    </aside>
+  </form></div>`;
+}
+function validate(){
+  const f = S.form, e = {};
+  if(!f.name || f.name.trim().length < 3) e.name = 'Ingresá tu nombre completo';
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email||'')) e.email = 'Email no válido';
+  if(String(f.phone||'').replace(/\D/g,'').length < 8) e.phone = 'Ingresá un celular válido';
+  if(f.delivery !== 'retiro'){
+    if(!f.city || !f.city.trim()) e.city = 'Requerido';
+    if(!f.addr || f.addr.trim().length < 5) e.addr = 'Ingresá la dirección';
+  }
+  S.errors = e; return !Object.keys(e).length;
+}
+function orderText(o){
+  const L = [];
+  L.push(`Hola! Quiero confirmar mi pedido *${o.id}*`, '');
+  o.items.forEach(i => L.push(`• ${i.qty} × ${i.name} (${i.color}) — ${fmt(i.price*i.qty)}`));
+  L.push('', `Subtotal: ${fmt(o.sub)}`);
+  if(o.disc) L.push(`Descuento ${o.coupon}: −${fmt(o.disc)}`);
+  L.push(`${o.shipLabel}: ${o.ship?fmt(o.ship):'Gratis'}`);
+  if(o.adj) L.push(`${o.adjLabel}: ${o.adj<0?'−':'+'}${fmt(Math.abs(o.adj))}`);
+  L.push(`*Total: ${fmt(o.total)}*`, '');
+  L.push(`Nombre: ${o.customer.name}`, `Celular: ${o.customer.phone}`, `Email: ${o.customer.email}`);
+  if(o.customer.doc) L.push(`CI: ${o.customer.doc}`);
+  L.push(o.delivery==='retiro' ? 'Entrega: Retiro en showroom' : `Entrega: ${o.customer.addr}, ${o.customer.city}, ${o.customer.dept}`);
+  if(o.customer.notes) L.push(`Notas: ${o.customer.notes}`);
+  L.push(`Pago: ${PAYS[o.pay]}`);
+  return L.join('\n');
+}
+async function placeOrder(){
+  if(S.placing) return;
+  if(!validate()){ render(); const el = document.querySelector('.bad'); if(el) el.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  const t = totals();
+  // control de stock
+  for(const l of t.lines){ const tot = t.lines.filter(x=>x.id===l.id).reduce((a,x)=>a+x.qty,0); if(tot > (Number(l.p.stock)||0)){ toast(`Stock insuficiente: ${l.p.name}`); return; } }
+  S.placing = true; render();
+  const f = S.form;
+  const o = {
+    id: 'NG-' + Date.now().toString(36).toUpperCase().slice(-6),
+    createdAt: Date.now(), status:'nuevo', paid:false, stockApplied:false,
+    items: t.lines.map(l=>({id:l.id, name:l.p.name, color:l.col.n, colorHex:l.col.h, type:l.p.type, qty:l.qty, price:l.p.price})),
+    sub:t.sub, disc:t.disc, adj:t.adj||0, adjLabel:t.adjLabel||'', coupon: t.cp ? t.cp.code : '', ship:t.ship, shipLabel:t.shipLabel, total:t.total,
+    delivery: f.delivery==='retiro' ? 'retiro' : 'envio', pay:f.pay,
+    customer:{name:f.name.trim(), email:f.email.trim(), phone:f.phone.trim(), doc:(f.doc||'').trim(),
+      dept: f.delivery==='retiro'?'':f.dept, city: f.delivery==='retiro'?'':(f.city||'').trim(), addr: f.delivery==='retiro'?'':(f.addr||'').trim(), notes:(f.notes||'').trim()},
+    history:[{s:'nuevo', t:Date.now()}]
+  };
+  let saved = false;
+  if(S.db && S.uid){
+    try{
+      const ref = S.db.doc('orders/'+S.uid);
+      const snap = await ref.get();
+      const cur = snap.exists ? JSON.parse(JSON.stringify(snap.data())) : {orders:[]};
+      cur.orders = (cur.orders||[]).concat([o]); cur.updatedAt = Date.now();
+      await ref.set(cur); saved = true;
+    }catch(err){ console.warn('No se pudo guardar el pedido', err); }
+  }
+  o.saved = saved;
+  S.localOrders = [o, ...S.localOrders.filter(x=>x.id!==o.id)].slice(0,30); LS.set('orders', S.localOrders);
+  LS.set('customer', {...S.form, notes:''});
+  S.lastOrder = o; LS.set('lastOrder', o);
+  S.cart = []; saveCart(); S.coupon=''; LS.set('coupon','');
+  S.placing = false; S.errors = {};
+  go('pedido-confirmado');
+}
+function viewSuccess(){
+  const o = S.lastOrder; const c = cfg();
+  if(!o) return `<div class="wrap empty"><h3>No hay un pedido reciente</h3><a class="btn btn-p" href="#tienda">Ir a la tienda</a></div>`;
+  const wa = c.whatsapp ? `https://wa.me/${waDigits(c.whatsapp)}?text=${encodeURIComponent(orderText(o))}` : '';
+  return `<div class="wrap" style="max-width:720px">
+    <div class="ok-hero"><div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m5 12 5 5 9-10"/></svg></div>
+      <h1>¡Gracias, ${esc(o.customer.name.split(' ')[0])}!</h1><p class="muted">Tu pedido <b style="color:var(--ink)">${esc(o.id)}</b> por <b style="color:var(--ink)">${fmt(o.total)}</b> fue ${o.saved?'registrado':'generado'}.</p></div>
+    ${!o.saved?`<div class="note" style="margin-bottom:14px"><b>Último paso:</b> enviá el pedido por WhatsApp para que lo recibamos y lo confirmemos.</div>`:''}
+    <div class="panel"><h3>Próximos pasos</h3>
+      ${o.pay==='transferencia'?`<p>Transferí <b>${fmt(o.total)}</b> indicando el número de pedido <b>${esc(o.id)}</b> y envianos el comprobante.</p>${c.bank?`<div class="note info"><b>Datos bancarios</b><pre class="bank">${esc(c.bank)}</pre></div>`:'<p class="muted small">Te enviamos los datos bancarios por WhatsApp o email.</p>'}`:''}
+      ${o.pay==='efectivo'?`<p>Pagás <b>${fmt(o.total)}</b> en efectivo ${o.delivery==='retiro'?'al retirar en el showroom':'al recibir tu pedido'}.</p>`:''}
+      ${o.pay==='tarjeta'?`<p>Pagás <b>${fmt(o.total)}</b> con tarjeta ${o.delivery==='retiro'?'en el showroom':'al recibir (llevamos POS)'}, o si preferís te enviamos un link de pago.</p>`:''}
+      <p class="muted">Te contactamos al ${esc(o.customer.phone)} para coordinar ${o.delivery==='retiro'?'el retiro':'la entrega'}.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px">
+        ${wa?`<a class="btn btn-wa" href="${wa}" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>`:''}
+        <button class="btn btn-g" data-a="copyorder">Copiar detalle del pedido</button>
+      </div>
+    </div>
+    <div class="panel"><h3>Detalle</h3>
+      ${o.items.map(i=>`<div class="sumi"><div class="th">${art(i.type,i.colorHex)}</div><div class="n">${esc(i.name)}<br><span class="muted small">${esc(i.color)} · ${i.qty} u.</span></div><b class="small">${fmt(i.price*i.qty)}</b></div>`).join('')}
+      <div class="tot" style="margin-top:8px"><span>Subtotal</span><span>${fmt(o.sub)}</span></div>
+      ${o.disc?`<div class="tot disc"><span>Descuento</span><span>− ${fmt(o.disc)}</span></div>`:''}
+      <div class="tot"><span>${esc(o.shipLabel)}</span><span>${o.ship?fmt(o.ship):'Gratis'}</span></div>
+      ${o.adj?`<div class="tot ${o.adj<0?'disc':''}"><span>${esc(o.adjLabel)}</span><span>${o.adj<0?'− ':'+ '}${fmt(Math.abs(o.adj))}</span></div>`:''}
+      <div class="tot big"><span>Total</span><span>${fmt(o.total)}</span></div>
+    </div>
+    <div style="text-align:center;margin:20px 0"><a class="btn btn-o" href="#tienda">Seguir comprando</a></div>
+  </div>`;
+}
+function orderCard(o, admin, docId){
+  const st = STATUSES.find(s=>s[0]===o.status) || STATUSES[0];
+  const d = new Date(o.createdAt);
+  return `<div class="ord">
+    <div class="ord-h"><div><b class="serif" style="font-size:19px">${esc(o.id)}</b> <span class="muted small">· ${d.toLocaleDateString('es-UY')} ${d.toLocaleTimeString('es-UY',{hour:'2-digit',minute:'2-digit'})}</span></div>
+      <div class="inl">${admin?`<span class="${o.paid?'paid':'unpaid'}">${o.paid?'Pagado':'Pago pendiente'}</span>`:''}<span class="st st-${esc(o.status)}">${st[1]}</span></div></div>
+    ${admin?`<div class="small" style="margin-top:8px"><b>${esc(o.customer.name)}</b> · ${esc(o.customer.phone)} · ${esc(o.customer.email)}${o.customer.doc?' · CI '+esc(o.customer.doc):''}<br><span class="muted">${o.delivery==='retiro'?'Retira en showroom':esc([o.customer.addr,o.customer.city,o.customer.dept].filter(Boolean).join(', '))}${o.customer.notes?' · '+esc(o.customer.notes):''}</span></div>`:''}
+    <div class="small" style="margin:10px 0">${o.items.map(i=>`${i.qty} × ${esc(i.name)} <span class="muted">(${esc(i.color)})</span>`).join('<br>')}</div>
+    <div class="ord-h"><span class="small muted">${esc(PAYS[o.pay]||o.pay)} · ${o.delivery==='retiro'?'Retiro':'Envío'}${o.coupon?' · Cupón '+esc(o.coupon):''}</span><b>${fmt(o.total)}</b></div>
+    ${admin?`<div class="inl" style="margin-top:12px;border-top:1px solid var(--line);padding-top:12px">
+      <select class="minisel" data-a="ostatus" data-doc="${esc(docId)}" data-id="${esc(o.id)}">${STATUSES.map(([k,n])=>`<option value="${k}" ${o.status===k?'selected':''}>${n}</option>`).join('')}</select>
+      <button class="btn btn-g btn-sm" data-a="opaid" data-doc="${esc(docId)}" data-id="${esc(o.id)}">${o.paid?'Marcar no pagado':'Marcar pagado'}</button>
+      ${waDigits(o.customer.phone).length>=8?`<a class="btn btn-wa btn-sm" target="_blank" rel="noopener" href="https://wa.me/${waDigits(o.customer.phone)}?text=${encodeURIComponent(`Hola ${o.customer.name.split(' ')[0]}! Te escribimos de ${cfg().storeName} por tu pedido ${o.id}.`)}">WhatsApp</a>`:''}
+    </div>`:''}
+  </div>`;
+}
+function viewMyOrders(){
+  const map = new Map();
+  S.localOrders.forEach(o=>map.set(o.id,o));
+  S.myOrders.forEach(o=>map.set(o.id,o)); // la versión guardada manda (tiene el estado actualizado)
+  const list = [...map.values()].sort((a,b)=>b.createdAt-a.createdAt);
+  return `<div class="wrap" style="max-width:760px"><div class="shop-head"><h1>Mis pedidos</h1><p class="muted">Seguí el estado de tus compras.</p></div>
+    ${list.length?list.map(o=>orderCard(o,false)).join(''):`<div class="empty"><h3>Aún no hiciste pedidos</h3><a class="btn btn-p" href="#tienda">Ir a la tienda</a></div>`}</div>`;
+}
+
+/* ===== Admin ===== */
+function viewAdmin(){
+  if(!S.isAdmin){
+    return `<div class="wrap empty"><h3>Panel de administración</h3><p>${S.dbState==='connecting'?'Verificando acceso…':S.dbState==='static'?'En esta versión, los productos, precios, stock y datos de la tienda se editan en el archivo data/tienda.json del repositorio. Los pedidos llegan por WhatsApp.':'Solo el dueño de la tienda (o editores invitados) puede ver esta sección.'}</p><a class="btn btn-p" href="#inicio">Volver a la tienda</a></div>`;
+  }
+  const tabs = [['resumen','Resumen'],['pedidos','Pedidos'],['productos','Productos'],['cupones','Cupones'],['ajustes','Ajustes']];
+  let body = '';
+  if(S.adminTab==='resumen') body = admResumen();
+  if(S.adminTab==='pedidos') body = admPedidos();
+  if(S.adminTab==='productos') body = admProductos();
+  if(S.adminTab==='cupones') body = admCupones();
+  if(S.adminTab==='ajustes') body = admAjustes();
+  const pend = S.allOrders.filter(x=>x.o.status==='nuevo').length;
+  return `<div class="wrap"><div class="adm-h"><h1>Administración</h1><a class="btn btn-g btn-sm" href="#inicio">Ver tienda</a></div>
+    ${!cfg().whatsapp?`<div class="note" style="margin-top:10px">Configurá el <b>WhatsApp de la tienda</b> en <a href="#" data-a="tab" data-t="ajustes">Ajustes</a>: los clientes envían su pedido por ahí.</div>`:''}
+    <div class="tabs">${tabs.map(([k,n])=>`<button data-a="tab" data-t="${k}" class="${S.adminTab===k?'on':''}">${n}${k==='pedidos'&&pend?` (${pend})`:''}</button>`).join('')}</div>
+    ${body}</div>`;
+}
+function admResumen(){
+  const ords = S.allOrders.map(x=>x.o);
+  const valid = ords.filter(o=>o.status!=='cancelado');
+  const sales = valid.reduce((a,o)=>a+o.total,0);
+  const now = Date.now(), month = valid.filter(o=>now-o.createdAt < 30*864e5);
+  const low = products().filter(p=>p.active!==false && (Number(p.stock)||0) <= 2);
+  const top = {}; valid.forEach(o=>o.items.forEach(i=>{ top[i.name]=(top[i.name]||0)+i.qty; }));
+  const topL = Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,5); const mx = topL[0]?topL[0][1]:1;
+  return `<div class="kpis">
+    <div class="kpi"><span>Ventas totales</span><b>${fmt(sales)}</b></div>
+    <div class="kpi"><span>Últimos 30 días</span><b>${fmt(month.reduce((a,o)=>a+o.total,0))}</b></div>
+    <div class="kpi"><span>Pedidos</span><b>${valid.length}</b></div>
+    <div class="kpi"><span>Ticket promedio</span><b>${fmt(valid.length?sales/valid.length:0)}</b></div></div>
+  <div class="two">
+    <div class="panel"><h3>Más vendidos</h3>${topL.length?topL.map(([n,q])=>`<div class="bar"><span style="width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(n)}</span><div class="bw"><i style="width:${Math.max(6,q/mx*100)}%"></i></div><b>${q}</b></div>`).join(''):'<p class="muted small">Todavía no hay ventas registradas.</p>'}</div>
+    <div class="panel"><h3>Stock bajo</h3>${low.length?low.map(p=>`<div class="tot"><span>${esc(p.name)}</span><b style="color:${(Number(p.stock)||0)<=0?'var(--err)':'var(--warn)'}">${Number(p.stock)||0} u.</b></div>`).join(''):'<p class="muted small">Todo el catálogo tiene stock suficiente.</p>'}</div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h3>Pedidos nuevos</h3>${ords.filter(o=>o.status==='nuevo').length?S.allOrders.filter(x=>x.o.status==='nuevo').slice(0,5).map(x=>orderCard(x.o,true,x.doc)).join(''):'<p class="muted small">No hay pedidos pendientes.</p>'}</div>`;
+}
+function admPedidos(){
+  const q = S.adminQ.trim().toLowerCase();
+  const list = S.allOrders.filter(x => (S.adminStatus==='todos' || x.o.status===S.adminStatus) &&
+    (!q || [x.o.id, x.o.customer.name, x.o.customer.phone, x.o.customer.email].join(' ').toLowerCase().includes(q)));
+  return `<div class="filters" style="margin-top:0"><label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="aq" type="search" placeholder="Buscar por número, cliente o teléfono" value="${esc(S.adminQ)}"></label>
+    <select class="sel" id="ast"><option value="todos">Todos los estados</option>${STATUSES.map(([k,n])=>`<option value="${k}" ${S.adminStatus===k?'selected':''}>${n}</option>`).join('')}</select></div>
+  <p class="small muted">Al pasar un pedido a <b>Confirmado</b> se descuenta el stock; si lo cancelás, se repone. Los pedidos que llegan solo por WhatsApp no aparecen acá.</p>
+  <div id="aorders">${list.length?list.map(x=>orderCard(x.o,true,x.doc)).join(''):'<div class="empty"><h3>Sin pedidos</h3><p>Cuando un cliente confirme una compra la vas a ver acá.</p></div>'}</div>`;
+}
+function admProductos(){
+  const usingBase = !(S.dbProducts && S.dbProducts.length);
+  return `<div class="inl" style="justify-content:space-between;margin-bottom:12px"><span class="muted small">${products().length} productos</span>
+    <div class="inl">${usingBase?'<button class="btn btn-g btn-sm" data-a="seed">Cargar catálogo de muestra</button>':''}<button class="btn btn-p btn-sm" data-a="pnew">+ Nuevo producto</button></div></div>
+  ${usingBase?'<div class="note" style="margin-bottom:12px">La tienda está mostrando el catálogo de muestra. Cargalo para poder editarlo, o creá tus productos desde cero.</div>':''}
+  <div class="tblwrap"><table class="tbl"><thead><tr><th></th><th>Producto</th><th>Precio</th><th>Stock</th><th>Visible</th><th></th></tr></thead><tbody>
+  ${products().map(p=>`<tr><td><div class="th">${media(p,0)}</div></td><td><b>${esc(p.name)}</b><br><span class="small muted">${esc(catName(p.cat))}${p.featured?' · Destacado':''}</span></td><td>${fmt(p.price)}</td>
+    <td><div class="qty sm"><button data-a="stk" data-id="${esc(p.id)}" data-d="-1">−</button><span>${Number(p.stock)||0}</span><button data-a="stk" data-id="${esc(p.id)}" data-d="1">+</button></div></td>
+    <td><input type="checkbox" data-a="pvis" data-id="${esc(p.id)}" ${p.active!==false?'checked':''} ${usingBase?'disabled':''}></td>
+    <td><div class="inl" style="flex-wrap:nowrap"><button class="btn btn-g btn-sm" data-a="pedit" data-id="${esc(p.id)}">Editar</button><button class="btn btn-g btn-sm" data-a="pdel" data-id="${esc(p.id)}" ${usingBase?'disabled':''}>Borrar</button></div></td></tr>`).join('')}
+  </tbody></table></div>`;
+}
+function admCupones(){
+  const cps = cfg().coupons||[];
+  return `<div class="two"><div class="panel"><h3>Cupones activos</h3>
+    ${cps.length?cps.map((c,i)=>`<div class="tot" style="align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><span><b>${esc(c.code)}</b> <span class="muted small">${c.type==='pct'?c.value+'% off':fmt(c.value)+' off'}</span></span>
+      <span class="inl"><label class="chk small"><input type="checkbox" data-a="cptog" data-i="${i}" ${c.active!==false?'checked':''}> Activo</label><button class="btn btn-g btn-sm" data-a="cpdel" data-i="${i}">Borrar</button></span></div>`).join(''):'<p class="muted small">No hay cupones.</p>'}
+  </div><div class="panel"><h3>Nuevo cupón</h3><form id="cpform" class="fg">
+    <label class="f full">Código<input name="code" required placeholder="EJ: INVIERNO15" style="text-transform:uppercase"></label>
+    <label class="f">Tipo<select name="type"><option value="pct">Porcentaje (%)</option><option value="fix">Monto fijo ($)</option></select></label>
+    <label class="f">Valor<input name="value" type="number" min="1" required></label>
+    <button class="btn btn-p full" type="submit">Crear cupón</button></form></div></div>`;
+}
+function admAjustes(){
+  const c = cfg();
+  const f = (k,l,t='text',full='') => `<label class="f ${full}">${l}<input name="${k}" type="${t}" value="${esc(c[k])}"></label>`;
+  return `<form id="setform"><div class="panel"><h3>Tienda</h3><div class="fg">
+    ${f('storeName','Nombre de la tienda')}${f('tagline','Frase principal')}
+    ${f('whatsapp','WhatsApp de ventas (ej: 099 123 456)')}${f('phone','Teléfono')}
+    ${f('email','Email de contacto','email')}${f('hours','Horario de atención')}
+    ${f('address','Dirección del showroom','text','full')}
+    </div></div>
+  <div class="panel"><h3>Envíos y garantía</h3><div class="fg">
+    ${f('shipMvd','Costo envío Montevideo ($)','number')}${f('shipInt','Costo envío interior ($)','number')}
+    ${f('freeFrom','Envío gratis desde ($, 0 = nunca)','number')}${f('warranty','Garantía')}</div></div>
+  <div class="panel"><h3>Pagos</h3><div class="fg">
+    ${f('cardFee','Recargo por pago con tarjeta (%)','number')}${f('cashDisc','Descuento por transferencia o efectivo (%)','number')}
+    <p class="small muted full" style="margin:0">Se muestran al cliente antes de confirmar. Dejá en 0 lo que no quieras usar.</p></div></div>
+  <div class="panel"><h3>Datos para transferencia</h3><label class="f">Se muestran al cliente que elige transferencia<textarea name="bank" rows="4" placeholder="Banco: \nCuenta: \nTitular: \nRUT: ">${esc(c.bank)}</textarea></label></div>
+  <div style="margin-top:16px"><button class="btn btn-p" type="submit">Guardar ajustes</button></div></form>`;
+}
+
+/* Modal de producto */
+function openProductModal(id){
+  const p = id ? JSON.parse(JSON.stringify(byId(id))) : {id:'', name:'', cat:'living', type:'sofa', price:0, compare:0, stock:1, material:'', dims:'', colors:[{n:'Natural',h:'#C9B79C'}], desc:'', featured:false, active:true, image:''};
+  S.editing = p;
+  drawProductModal();
+}
+function drawProductModal(){
+  const p = S.editing;
+  $('#modal').innerHTML = `<div class="modal" data-a="mclose-bg"><div class="box"><h3>${p.id?'Editar producto':'Nuevo producto'}</h3>
+  <form id="pform" class="fg">
+    <label class="f full">Nombre<input name="name" value="${esc(p.name)}" required></label>
+    <label class="f">Categoría<select name="cat">${CATS.map(c=>`<option value="${c.id}" ${p.cat===c.id?'selected':''}>${c.n}</option>`).join('')}</select></label>
+    <label class="f">Tipo (ilustración)<select name="type">${Object.entries(ART_TYPES).map(([k,n])=>`<option value="${k}" ${p.type===k?'selected':''}>${n}</option>`).join('')}</select></label>
+    <label class="f">Precio ($)<input name="price" type="number" min="0" value="${p.price}" required></label>
+    <label class="f">Precio anterior ($, opcional)<input name="compare" type="number" min="0" value="${p.compare||''}"></label>
+    <label class="f">Stock<input name="stock" type="number" min="0" value="${p.stock}"></label>
+    <label class="f">Medidas<input name="dims" value="${esc(p.dims)}" placeholder="180 × 90 × 76 cm"></label>
+    <label class="f full">Material<input name="material" value="${esc(p.material)}"></label>
+    <label class="f full">Descripción<textarea name="desc" rows="3">${esc(p.desc)}</textarea></label>
+    <div class="full"><div class="opt-l" style="margin-top:0">Colores / terminaciones</div><div id="colrows">${(p.colors||[]).map((c,i)=>`<div class="colrow"><input type="color" data-ci="${i}" value="${safeColor(c.h).slice(0,7)}"><input type="text" data-cn="${i}" value="${esc(c.n)}" placeholder="Nombre del color"><button type="button" class="btn btn-g btn-sm" data-a="colrm" data-i="${i}">Quitar</button></div>`).join('')}</div>
+      <button type="button" class="btn btn-g btn-sm" data-a="coladd">+ Agregar color</button></div>
+    <div class="full"><div class="opt-l">Foto (opcional — si no subís una, se usa la ilustración)</div>
+      <div class="inl"><div class="imgprev" id="imgprev">${media(p,0)}</div><div style="display:flex;flex-direction:column;gap:8px"><input type="file" accept="image/*" id="pimg">${p.image?'<button type="button" class="btn btn-g btn-sm" data-a="imgrm">Quitar foto</button>':''}</div></div></div>
+    <label class="chk"><input type="checkbox" name="featured" ${p.featured?'checked':''}> Destacado en inicio</label>
+    <label class="chk"><input type="checkbox" name="active" ${p.active!==false?'checked':''}> Visible en la tienda</label>
+    <div class="full inl" style="justify-content:flex-end;margin-top:8px"><button type="button" class="btn btn-g" data-a="mclose">Cancelar</button><button class="btn btn-p" type="submit">Guardar</button></div>
+  </form></div></div>`;
+}
+function syncEditingFromForm(){
+  const fm = $('#pform'); if(!fm) return;
+  const fd = new FormData(fm); const p = S.editing;
+  ['name','cat','type','dims','material','desc'].forEach(k=>p[k]=String(fd.get(k)||''));
+  p.price = num(fd.get('price')); p.compare = num(fd.get('compare')); p.stock = Math.max(0, Math.round(num(fd.get('stock'))));
+  p.featured = !!fd.get('featured'); p.active = !!fd.get('active');
+  p.colors = (p.colors||[]).map((c,i)=>({ n: (fm.querySelector(`[data-cn="${i}"]`)||{}).value || c.n, h: (fm.querySelector(`[data-ci="${i}"]`)||{}).value || c.h }));
+}
+async function saveProduct(){
+  syncEditingFromForm();
+  const p = S.editing;
+  if(!p.name.trim()){ toast('Poné un nombre'); return; }
+  if(!(p.price>0)){ toast('Poné un precio válido'); return; }
+  if(!p.colors.length) p.colors = [{n:'Único', h:'#C9B79C'}];
+  if(!p.id){ p.id = 'p' + Date.now().toString(36); p.order = Math.max(0,...products().map(x=>x.order||0)) + 1; }
+  if(!(await ensureDbCatalog())) return;
+  try{ await S.db.doc('products/'+p.id).set(p); toast('Producto guardado'); closeModal(); }
+  catch(e){ toast(e && e.code==='quota_exceeded' ? 'La base de datos está llena' : 'No se pudo guardar'); }
+}
+async function ensureDbCatalog(){
+  if(!S.db){ toast('Sin conexión a la base de datos'); return false; }
+  if(S.dbProducts && S.dbProducts.length) return true;
+  return await seedCatalog(true);
+}
+async function seedCatalog(silent){
+  if(!S.db){ toast('Sin conexión a la base de datos'); return false; }
+  try{ for(const p of BASE_PRODUCTS){ await S.db.doc('products/'+p.id).set(p); } if(!silent) toast('Catálogo cargado'); return true; }
+  catch(e){ toast('No se pudo cargar el catálogo'); return false; }
+}
+async function saveConfig(next){
+  if(!S.db){ toast('Sin conexión a la base de datos'); return false; }
+  try{ await S.db.doc('config/store').set(next); S.config = {...DEFAULT_CONFIG, ...next}; renderChrome(); return true; }
+  catch(e){ toast('No se pudo guardar'); return false; }
+}
+const writeQ = {};
+function queued(key, fn){ writeQ[key] = (writeQ[key]||Promise.resolve()).then(fn, fn); return writeQ[key]; }
+async function adjustStock(id, delta){
+  const p = byId(id); if(!p || !S.db) return;
+  const ref = S.db.doc('products/'+id);
+  const snap = await ref.get(); const cur = snap.exists ? Number(snap.data().stock)||0 : Number(p.stock)||0;
+  if(snap.exists) await ref.update({stock: Math.max(0, cur + delta)});
+}
+async function updateOrder(docId, orderId, mut){
+  return queued('o:'+docId, async ()=>{
+    const ref = S.db.doc('orders/'+docId);
+    const snap = await ref.get(); if(!snap.exists) return;
+    const data = JSON.parse(JSON.stringify(snap.data()));
+    const o = (data.orders||[]).find(x=>x.id===orderId); if(!o) return;
+    await mut(o); data.updatedAt = Date.now();
+    await ref.set(data);
+  });
+}
+async function setStatus(docId, orderId, status){
+  if(!(await ensureDbCatalog())) return;
+  try{
+    await updateOrder(docId, orderId, async o => {
+      o.status = status; o.history = (o.history||[]).concat([{s:status,t:Date.now()}]);
+      if(!o.stockApplied && ['confirmado','enviado','entregado'].includes(status)){ for(const i of o.items) await queued('p:'+i.id, ()=>adjustStock(i.id, -i.qty)); o.stockApplied = true; }
+      if(o.stockApplied && status==='cancelado'){ for(const i of o.items) await queued('p:'+i.id, ()=>adjustStock(i.id, i.qty)); o.stockApplied = false; }
+    });
+    toast('Pedido actualizado');
+  }catch(e){ toast('No se pudo actualizar el pedido'); }
+}
+
+/* ================= Drawers & modal ================= */
+function renderCart(){
+  const t = totals({delivery:'envio', dept:'Montevideo'}); const c = cfg();
+  const free = Number(c.freeFrom)||0; const after = t.sub - t.disc;
+  $('#cartdrawer').innerHTML = `<div class="dh"><h3>Tu carrito</h3><button class="iconbtn" data-a="close" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="db">${t.lines.length ? (free?`<div class="small" style="margin-top:10px">${after>=free?'🎉 ¡Tenés <b>envío gratis</b>!':`Te faltan <b>${fmt(free-after)}</b> para el envío gratis`}</div><div class="progress"><i style="width:${Math.min(100,after/free*100)}%"></i></div>`:'') +
+    t.lines.map(l=>`<div class="ci"><a class="th" href="#p-${esc(l.id)}" data-a="close">${media(l.p,l.ci)}</a><div>
+      <div class="r1"><div><b style="font-weight:500">${esc(l.p.name)}</b><div class="small muted">${esc(l.col.n)}</div></div><button class="link small" data-a="rm" data-k="${esc(l.key)}">Quitar</button></div>
+      <div class="r2"><div class="qty sm"><button data-a="cq" data-k="${esc(l.key)}" data-d="-1">−</button><span>${l.qty}</span><button data-a="cq" data-k="${esc(l.key)}" data-d="1">+</button></div><b>${fmt(l.total)}</b></div></div></div>`).join('')
+    : `<div class="empty" style="padding:50px 0"><h3>Está vacío</h3><p>Descubrí nuestros muebles y armá tu espacio.</p><a class="btn btn-p" href="#tienda" data-a="close">Ver catálogo</a></div>`}</div>
+  ${t.lines.length?`<div class="df"><div class="tot"><span>Subtotal</span><span>${fmt(t.sub)}</span></div>${t.disc?`<div class="tot disc"><span>Cupón ${esc(t.cp.code)}</span><span>− ${fmt(t.disc)}</span></div>`:''}
+    <p class="small muted" style="margin:4px 0 12px">Envío y cupones se calculan en el próximo paso.</p>
+    <a class="btn btn-a btn-block" href="#checkout" data-a="close">Finalizar compra</a></div>`:''}`;
+}
+function renderMenu(){
+  $('#menudrawer').innerHTML = `<div class="dh"><h3>${esc(cfg().storeName)}</h3><button class="iconbtn" data-a="close" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="db mnav"><a href="#inicio" data-a="close">Inicio</a><a href="#tienda" data-a="close">Todo el catálogo</a>${CATS.map(k=>`<a href="#cat-${k.id}" data-a="close">${k.n}</a>`).join('')}<a href="#favoritos" data-a="close">Favoritos</a><a href="#mis-pedidos" data-a="close">Mis pedidos</a><a href="#envios" data-a="close">Envíos y garantía</a>${S.isAdmin?'<a href="#admin" data-a="close">Administración</a>':''}</div>`;
+}
+function openDrawer(which){ if(which==='cart') renderCart(); else renderMenu(); $('#'+(which==='cart'?'cartdrawer':'menudrawer')).classList.add('on'); $('#scrim').classList.add('on'); }
+function closeDrawers(){ document.querySelectorAll('.drawer').forEach(d=>d.classList.remove('on')); $('#scrim').classList.remove('on'); }
+function closeModal(){ $('#modal').innerHTML=''; S.editing=null; }
+function confirmBox(msg, onYes){
+  $('#modal').innerHTML = `<div class="modal" data-a="mclose-bg"><div class="box sm"><h3>¿Seguro?</h3><p>${esc(msg)}</p><div class="inl" style="justify-content:flex-end;margin-top:14px"><button class="btn btn-g" data-a="mclose">Cancelar</button><button class="btn btn-a" id="yesbtn">Sí, borrar</button></div></div></div>`;
+  $('#yesbtn').onclick = async ()=>{ closeModal(); await onYes(); };
+}
+
+/* ================= Router ================= */
+function currentHash(){ return decodeURIComponent(location.hash.slice(1)) || 'inicio'; }
+function go(h){ if(currentHash()===h) render(); else location.hash = h; }
+function render(){
+  const h = currentHash();
+  document.body.classList.remove('has-sticky');
+  let html;
+  if(h==='inicio') html = viewHome();
+  else if(h==='tienda'){ S.f.cat='todas'; html = viewShop(); }
+  else if(h.startsWith('cat-')){ S.f.cat = h.slice(4); html = viewShop(); }
+  else if(h.startsWith('p-')) html = viewProduct(h.slice(2));
+  else if(h==='favoritos') html = viewFavs();
+  else if(h==='checkout') html = viewCheckout();
+  else if(h==='pedido-confirmado') html = viewSuccess();
+  else if(h==='mis-pedidos') html = viewMyOrders();
+  else if(h==='envios') html = viewShipping();
+  else if(h==='admin') html = viewAdmin();
+  else html = viewHome();
+  $('#app').innerHTML = html;
+  renderResults();
+  renderChrome();
+  if($('#cartdrawer').classList.contains('on')) renderCart();
+}
+let lastRoute = '';
+window.addEventListener('hashchange', ()=>{
+  const h = currentHash(); const base = h.split('-')[0];
+  if(h.startsWith('p-') && h!==lastRoute) S.qty = 1;
+  render(); if(h!==lastRoute) window.scrollTo(0,0); lastRoute = h; closeDrawers();
+});
+/* Re-render seguro ante cambios de datos (no pisa lo que el usuario está escribiendo) */
+let rrT;
+function softRender(){
+  clearTimeout(rrT); rrT = setTimeout(()=>{
+    const a = document.activeElement;
+    const typing = a && ['INPUT','TEXTAREA','SELECT'].includes(a.tagName) && $('#app').contains(a);
+    if(typing){ if(a.id==='q'){ renderResults(); renderChrome(); return; } return; }
+    const y = window.scrollY; render(); window.scrollTo(0,y);
+  }, 60);
+}
+
+/* ================= Eventos ================= */
+document.addEventListener('click', async e => {
+  const el = e.target.closest('[data-a]'); if(!el) return;
+  const a = el.dataset.a, id = el.dataset.id;
+  if(a==='mclose-bg'){ if(e.target===el) closeModal(); return; }
+  if(['quickadd','add','fav','color','pqty','rm','cq','coupon','copyorder','clearf','tab','menu','cart','search','close','mclose','herocolor','heroadd','stk','pedit','pnew','pdel','seed','cpdel','opaid','coladd','colrm','imgrm'].includes(a) && el.tagName!=='A') e.preventDefault();
+  if(a==='tab') e.preventDefault();
+  switch(a){
+    case 'menu': openDrawer('menu'); break;
+    case 'cart': openDrawer('cart'); break;
+    case 'close': closeDrawers(); break;
+    case 'search': go('tienda'); setTimeout(()=>{ const q=$('#q'); if(q) q.focus(); }, 50); break;
+    case 'quickadd': addToCart(id, 0, 1); break;
+    case 'herocolor': { S.heroCi = Number(el.dataset.i); const st=$('#herostage'), pk=$('#heropick'); if(st) st.innerHTML = heroStage(); if(pk) pk.innerHTML = heroPick(); break; }
+    case 'heroadd': { const p = heroProduct(); if(p) addToCart(p.id, S.heroCi||0, 1); break; }
+    case 'add': addToCart(id, S.sel[id]||0, S.qty); break;
+    case 'fav': { const i = S.favs.indexOf(id); if(i>=0) S.favs.splice(i,1); else { S.favs.push(id); toast('Guardado en favoritos'); } LS.set('favs', S.favs); softRender(); break; }
+    case 'color': { S.sel[id] = Number(el.dataset.i); const y=window.scrollY; render(); window.scrollTo(0,y); break; }
+    case 'pqty': { S.qty = Math.max(1, Math.min(99, S.qty + Number(el.dataset.d))); $('#pq').textContent = S.qty; break; }
+    case 'rm': S.cart = S.cart.filter(l=>l.key!==el.dataset.k); saveCart(); renderCart(); if(currentHash()==='checkout') render(); break;
+    case 'cq': { const l = S.cart.find(x=>x.key===el.dataset.k); if(!l) break; const p = byId(l.id); const nq = l.qty + Number(el.dataset.d);
+      const others = S.cart.filter(x=>x.id===l.id && x.key!==l.key).reduce((s,x)=>s+x.qty,0);
+      if(nq < 1){ S.cart = S.cart.filter(x=>x!==l); } else if(p && nq + others > (Number(p.stock)||0)){ toast('No hay más stock disponible'); break; } else l.qty = nq;
+      saveCart(); renderCart(); if(currentHash()==='checkout') render(); break; }
+    case 'coupon': { const v = ($('#cpin').value||'').trim().toUpperCase(); S.coupon = v; LS.set('coupon', v); toast(findCoupon(v)?'Cupón aplicado':'Cupón no válido'); render(); break; }
+    case 'copyorder': { try{ await navigator.clipboard.writeText(orderText(S.lastOrder)); toast('Pedido copiado'); }catch(err){ toast('No se pudo copiar'); } break; }
+    case 'clearf': S.f = {q:'', cat:S.f.cat, sort:'destacados', max:0, mat:''}; render(); break;
+    case 'tab': S.adminTab = el.dataset.t; render(); break;
+    case 'mclose': closeModal(); break;
+    case 'pnew': openProductModal(null); break;
+    case 'pedit': openProductModal(id); break;
+    case 'seed': { el.disabled = true; if(await seedCatalog(false)) {} el.disabled = false; break; }
+    case 'pdel': confirmBox('Se va a borrar "'+(byId(id)||{}).name+'" del catálogo.', async ()=>{ try{ await S.db.doc('products/'+id).delete(); toast('Producto borrado'); }catch(err){ toast('No se pudo borrar'); } }); break;
+    case 'stk': { if(!(await ensureDbCatalog())) break; const p = byId(id); const v = Math.max(0,(Number(p.stock)||0)+Number(el.dataset.d));
+      try{ await queued('p:'+id, ()=>S.db.doc('products/'+id).update({stock:v})); }catch(err){ toast('No se pudo actualizar'); } break; }
+    case 'opaid': { const x = S.allOrders.find(x=>x.o.id===id); if(!x) break; try{ await updateOrder(el.dataset.doc, id, o=>{ o.paid = !o.paid; }); toast('Pago actualizado'); }catch(err){ toast('No se pudo actualizar'); } break; }
+    case 'cpdel': { const cps = (cfg().coupons||[]).slice(); cps.splice(Number(el.dataset.i),1); if(await saveConfig({...cfg(), coupons:cps})) { toast('Cupón borrado'); render(); } break; }
+    case 'coladd': syncEditingFromForm(); S.editing.colors.push({n:'', h:'#999999'}); drawProductModal(); break;
+    case 'colrm': syncEditingFromForm(); S.editing.colors.splice(Number(el.dataset.i),1); drawProductModal(); break;
+    case 'imgrm': syncEditingFromForm(); S.editing.image=''; drawProductModal(); break;
+  }
+});
+document.addEventListener('input', e => {
+  const t = e.target;
+  if(t.id==='q'){ S.f.q = t.value; renderResults(); return; }
+  if(t.id==='aq'){ S.adminQ = t.value; clearTimeout(t._t); t._t = setTimeout(()=>{ const el=$('#aorders'); if(!el) return; const tmp=document.createElement('div'); tmp.innerHTML=admPedidos(); el.innerHTML = tmp.querySelector('#aorders').innerHTML; }, 150); return; }
+  const fm = t.closest('#coform');
+  if(fm && t.name && t.type!=='radio'){ S.form[t.name] = t.value; if(S.errors[t.name]){ delete S.errors[t.name]; const lab=t.closest('.f'); if(lab){ lab.classList.remove('bad'); const er=lab.querySelector('.er'); if(er) er.remove(); } } }
+});
+document.addEventListener('change', async e => {
+  const t = e.target;
+  if(t.id==='fmax'){ S.f.max = Number(t.value); renderResults(); return; }
+  if(t.id==='fmat'){ S.f.mat = t.value; renderResults(); return; }
+  if(t.id==='fsort'){ S.f.sort = t.value; renderResults(); return; }
+  if(t.id==='ast'){ S.adminStatus = t.value; render(); return; }
+  const fm = t.closest('#coform');
+  if(fm && t.name){
+    S.form[t.name] = t.value;
+    if(t.type==='radio' || t.name==='dept'){ const y=window.scrollY; render(); window.scrollTo(0,y); }
+    return;
+  }
+  if(t.dataset.a==='ostatus'){ await setStatus(t.dataset.doc, t.dataset.id, t.value); return; }
+  if(t.dataset.a==='pvis'){ try{ await S.db.doc('products/'+t.dataset.id).update({active:t.checked}); }catch(err){ toast('No se pudo actualizar'); t.checked=!t.checked; } return; }
+  if(t.dataset.a==='cptog'){ const cps = JSON.parse(JSON.stringify(cfg().coupons||[])); cps[Number(t.dataset.i)].active = t.checked; await saveConfig({...cfg(), coupons:cps}); return; }
+  if(t.id==='pimg' && t.files && t.files[0]){
+    syncEditingFromForm();
+    try{ S.editing.image = await resizeImage(t.files[0]); drawProductModal(); }catch(err){ toast('No se pudo leer la imagen'); }
+  }
+});
+document.addEventListener('submit', async e => {
+  e.preventDefault();
+  const f = e.target;
+  if(f.id==='coform'){ placeOrder(); return; }
+  if(f.id==='pform'){ saveProduct(); return; }
+  if(f.id==='cpform'){
+    const fd = new FormData(f); const code = String(fd.get('code')||'').trim().toUpperCase().replace(/\s+/g,''); const value = num(fd.get('value'));
+    if(!code || !(value>0)){ toast('Completá código y valor'); return; }
+    const cps = (cfg().coupons||[]).filter(c=>String(c.code).toUpperCase()!==code).concat([{code, type:fd.get('type')==='fix'?'fix':'pct', value, active:true}]);
+    if(await saveConfig({...cfg(), coupons:cps})){ toast('Cupón creado'); render(); }
+    return;
+  }
+  if(f.id==='setform'){
+    const fd = new FormData(f); const next = {...cfg()};
+    ['storeName','tagline','whatsapp','phone','email','hours','address','warranty','bank'].forEach(k=>next[k]=String(fd.get(k)||'').trim());
+    ['shipMvd','shipInt','freeFrom','cardFee','cashDisc'].forEach(k=>next[k]=Math.max(0,num(fd.get(k))));
+    next.cardFee = Math.min(next.cardFee, 30); next.cashDisc = Math.min(next.cashDisc, 50);
+    if(await saveConfig(next)){ toast('Ajustes guardados'); render(); }
+  }
+});
+document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeDrawers(); closeModal(); } });
+function resizeImage(file){
+  return new Promise((res, rej) => {
+    const fr = new FileReader();
+    fr.onload = () => { const img = new Image();
+      img.onload = () => { const max = 900; let w = img.width, h = img.height; const s = Math.min(1, max/Math.max(w,h)); w = Math.round(w*s); h = Math.round(h*s);
+        const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(img,0,0,w,h);
+        let q = .82, url = cv.toDataURL('image/jpeg', q); while(url.length > 190000 && q > .35){ q -= .1; url = cv.toDataURL('image/jpeg', q); }
+        res(url); };
+      img.onerror = rej; img.src = fr.result; };
+    fr.onerror = rej; fr.readAsDataURL(file);
+  });
+}
+
+/* ================= Versión publicada fuera de Claude: lee data/tienda.json ================= */
+async function loadStatic(){
+  try{
+    const r = await fetch('data/tienda.json', {cache:'no-cache'});
+    if(!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    if(Array.isArray(d.products) && d.products.length) S.dbProducts = d.products.map(p => ({...p, price:Number(p.price)||0, compare:Number(p.compare)||0, stock:Number(p.stock)||0, colors:Array.isArray(p.colors)?p.colors:[]}));
+    if(d.config) S.config = {...DEFAULT_CONFIG, ...d.config};
+    S.dbState = 'static';
+  }catch(e){ S.dbState = 'offline'; }
+  render();
+}
+
+/* ================= Conexión con la base de datos ================= */
+async function connect(){
+  if(!window.claude || typeof window.claude.use !== 'function'){ await loadStatic(); return; }
+  const slow = setTimeout(()=>{ if(S.dbState==='connecting'){ S.dbState='slow'; renderChrome(); } }, 10000);
+  let db=null, user=null;
+  try{ [db, user] = await Promise.all([claude.use('db'), claude.use('user')]); }catch(e){}
+  S.db = db; S.user = user;
+  if(user){
+    try{ S.isAdmin = !!(await Promise.resolve(user.canEdit())); }catch(e){}
+    try{ S.uid = await Promise.resolve(user.id()); }catch(e){}
+  }
+  if(!db){ clearTimeout(slow); S.dbState='offline'; render(); return; }
+  const markLive = () => { if(S.dbState!=='live'){ S.dbState='live'; clearTimeout(slow); } };
+  db.collection('products').onSnapshot(snap => {
+    S.dbProducts = snap.docs.map(d => ({...d.data(), id:d.id}))
+      .map(p => ({...p, price:Number(p.price)||0, compare:Number(p.compare)||0, stock:Number(p.stock)||0, colors:Array.isArray(p.colors)?p.colors:[]}));
+    if(!snap.metadata.fromCache) markLive();
+    softRender();
+  }, err => { clearTimeout(slow); S.dbState = S.dbProducts ? 'live' : 'offline'; softRender(); });
+  db.doc('config/store').onSnapshot(snap => {
+    if(snap.exists) S.config = {...DEFAULT_CONFIG, ...snap.data()};
+    softRender();
+  }, ()=>{});
+  if(S.uid){
+    db.doc('orders/'+S.uid).onSnapshot(snap => {
+      S.myOrders = snap.exists ? (snap.data().orders||[]) : [];
+      softRender();
+    }, ()=>{});
+  }
+  if(S.isAdmin){
+    db.collection('orders').onSnapshot(snap => {
+      const all = [];
+      snap.docs.forEach(d => (d.data().orders||[]).forEach(o => all.push({doc:d.id, o})));
+      all.sort((a,b)=>b.o.createdAt-a.o.createdAt);
+      S.allOrders = all; softRender();
+    }, ()=>{});
+  }
+  render();
+}
+
+lastRoute = currentHash();
+render();
+connect();
+</script>
+</body>
+</html>
