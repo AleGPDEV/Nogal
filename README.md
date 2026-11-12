@@ -9,6 +9,8 @@ Todo está en **`data/tienda.json`**:
 - `products`: cada mueble con `name`, `price`, `compare` (precio anterior, 0 si no hay oferta), `stock`, `material`, `dims`, `desc`, `colors` (nombre + color hex), `cat` (`living`, `comedor`, `dormitorio`, `oficina`, `almacenamiento`, `iluminacion`), `type` (ilustración), `featured` (aparece en inicio) y `active` (visible o no).
 - `config`: nombre de la tienda, **`whatsapp` (obligatorio para recibir pedidos)**, teléfono, email, dirección, horario, datos bancarios (`bank`), costos de envío (`shipMvd`, `shipInt`, `freeFrom`), garantía, recargo por tarjeta (`cardFee`, en %), descuento por transferencia o efectivo (`cashDisc`, en %) y cupones.
 
+**Fotos:** subí la imagen a la carpeta `img/` y en el producto agregá `"image": "img/nombre.jpg"`. Sin foto, se muestra una ilustración.
+
 Para cambiar algo, editá el archivo en GitHub y guardá los cambios (commit). El sitio se actualiza solo en uno o dos minutos.
 
 ## Publicar en Cloudflare Pages (gratis)

@@ -509,8 +509,9 @@ function art(type, color, bg, bare){
   if(bare) return `<svg viewBox="40 30 320 230" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet" aria-hidden="true"><ellipse cx="200" cy="240" rx="160" ry="9" fill="rgba(0,0,0,.22)"/>${g}</svg>`;
   return `<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="400" height="300" fill="${bg||'#E7EAE3'}"/><rect y="238" width="400" height="62" fill="${shade(bg||'#E7EAE3',-4)}"/><ellipse cx="200" cy="240" rx="150" ry="8" fill="rgba(0,0,0,.08)"/>${g}</svg>`;
 }
+const okImg = u => typeof u==='string' && /^(data:image\/|img\/|\.\/img\/|https:\/\/)/.test(u);
 function media(p, ci){
-  if(p.image && /^data:image\//.test(p.image)) return `<img src="${esc(p.image)}" alt="${esc(p.name)}">`;
+  if(okImg(p.image)) return `<img src="${esc(p.image)}" alt="${esc(p.name)}">`;
   const col = (p.colors && p.colors[ci||0]) ? p.colors[ci||0].h : '#C9B79C';
   return art(p.type, col);
 }
@@ -631,7 +632,7 @@ function heroPick(){
 function heroStage(){
   const p = heroProduct(); if(!p) return '';
   const ci = Math.min(S.heroCi||0, Math.max(0,(p.colors||[]).length-1));
-  if(p.image && /^data:image\//.test(p.image)) return `<img src="${esc(p.image)}" alt="${esc(p.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
+  if(okImg(p.image)) return `<img src="${esc(p.image)}" alt="${esc(p.name)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
   return art(p.type, (p.colors[ci]||{}).h, null, true);
 }
 function viewHome(){
