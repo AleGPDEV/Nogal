@@ -26,7 +26,7 @@ Para cambiar algo, editá el archivo en GitHub y guardá los cambios (commit). E
 Al confirmar, la página envía el pedido a `functions/api/pedido.js` (una función de Cloudflare Pages). La función verifica los precios contra `data/tienda.json` y avisa a la empresa:
 
 - **Email** con el detalle del pedido, mediante [Resend](https://resend.com). Al responder ese email, le escribís directo al cliente.
-- **WhatsApp** al celular de la empresa, mediante [CallMeBot](https://www.callmebot.com).
+- **WhatsApp** al celular de la empresa, mediante [CallMeBot](https://www.callmebot.com) (gratis, uso personal, con cupos limitados) o [TextMeBot](https://textmebot.com) (US$1/mes). Configurás uno de los dos.
 
 Si la función no está configurada o falla, el cliente ve el botón **Enviar pedido por WhatsApp** como respaldo.
 
@@ -44,6 +44,8 @@ Si la función no está configurada o falla, el cliente ve el botón **Enviar pe
 | `ORDER_EMAIL_FROM` | `Pedidos <onboarding@resend.dev>` (o uno de tu dominio verificado) |
 | `CALLMEBOT_PHONE` | celular con código de país, sin `+` ni espacios: `598` + el número sin el 0 |
 | `CALLMEBOT_APIKEY` | la apikey de CallMeBot (tipo *Secret*) |
+| `TEXTMEBOT_PHONE` | alternativa a CallMeBot: celular con `+` y código de país, ej. `+598...` |
+| `TEXTMEBOT_APIKEY` | la apikey de textmebot.com (tipo *Secret*) |
 | `CUSTOMER_COPY` | opcional: `true` para mandar copia al cliente (requiere dominio verificado) |
 
 4. **Deployments** → en el último despliegue, **Retry deployment** para que tome las variables.

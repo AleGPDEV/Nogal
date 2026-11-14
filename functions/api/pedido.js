@@ -11,6 +11,8 @@
  *   CUSTOMER_COPY      "true" para mandar copia al cliente (requiere dominio verificado en Resend)
  *   CALLMEBOT_PHONE    celular de la empresa con código de país, ej. 59899123456
  *   CALLMEBOT_APIKEY   clave que CallMeBot envía por WhatsApp al activarlo (secreta)
+ *   TEXTMEBOT_PHONE    alternativa a CallMeBot: celular que recibe, ej. +59897355233
+ *   TEXTMEBOT_APIKEY   clave de textmebot.com (secreta)
  * Cualquier canal sin configurar se omite.
  */
 
@@ -140,7 +142,14 @@ export async function onRequestPost(context) {
   if (env.CALLMEBOT_PHONE && env.CALLMEBOT_APIKEY) {
     const u = 'https://api.callmebot.com/whatsapp.php?phone=' + encodeURIComponent(env.CALLMEBOT_PHONE) +
       '&text=' + encodeURIComponent(txt) + '&apikey=' + encodeURIComponent(env.CALLMEBOT_APIKEY);
-    tasks.push(fetch(u).then((r) => { waOk = r.ok; }).catch((e) => console.log('CallMeBot', e)));
+    tasks.push(fetch(u).then((r) => { waOk = waOk || r.ok; }).catch((e) => console.log('CallMeBot', e)));
+  }
+
+  // WhatsApp con TextMeBot (alternativa paga, US$1/mes para enviarte a vos mismo).
+  if (env.TEXTMEBOT_APIKEY && env.TEXTMEBOT_PHONE) {
+    const u = 'https://api.textmebot.com/send.php?recipient=' + encodeURIComponent(env.TEXTMEBOT_PHONE) +
+      '&apikey=' + encodeURIComponent(env.TEXTMEBOT_APIKEY) + '&text=' + encodeURIComponent(txt);
+    tasks.push(fetch(u).then((r) => { waOk = waOk || r.ok; }).catch((e) => console.log('TextMeBot', e)));
   }
 
   await Promise.all(tasks);
