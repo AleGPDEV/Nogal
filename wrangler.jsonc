@@ -4,5 +4,7 @@
   "compatibility_date": "2025-11-01",
   "assets": { "directory": ".", "binding": "ASSETS" },
   // Conserva las variables cargadas en el panel de Cloudflare al desplegar.
-  "keep_vars": true
+  "keep_vars": true,
+  // Logs visibles en Cloudflare → Worker → Observability.
+  "observability": { "enabled": true }
 }

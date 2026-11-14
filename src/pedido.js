@@ -103,7 +103,7 @@ export async function handlePedido(request, env) {
   ].join('\n');
 
   const tasks = [];
-  let emailOk = false, waOk = false;
+  let emailOk = false, waOk = false, emailError = '';
 
   // Email a la empresa (y opcionalmente al cliente) con Resend.
   if (env.RESEND_API_KEY && env.ORDER_EMAIL_TO) {
@@ -127,7 +127,7 @@ export async function handlePedido(request, env) {
       from, to: env.ORDER_EMAIL_TO.split(',').map((s) => s.trim()).filter(Boolean), reply_to: cu.email,
       subject: `Nuevo pedido ${order.id} — ${money(total)} — ${cu.name}`,
       html: html(`Nuevo pedido ${order.id}`, `Pago: ${esc(PAYS[order.pay])}. Respondé este email para escribirle al cliente.`), text: txt,
-    }).then((r) => { emailOk = r.ok; if (!r.ok) return r.text().then((t) => console.log('Resend', r.status, t)); }).catch((e) => console.log('Resend', e)));
+    }).then((r) => { emailOk = r.ok; if (!r.ok) return r.text().then((t) => { console.log('Resend', r.status, t); let m = ''; try { m = JSON.parse(t).message || ''; } catch {} emailError = `Resend ${r.status}: ${String(m || t).slice(0, 200)}`; }); }).catch((e) => { console.log('Resend', e); emailError = 'Resend: ' + String(e).slice(0, 200); }));
     if (env.CUSTOMER_COPY === 'true') {
       tasks.push(send({
         from, to: [cu.email], reply_to: env.ORDER_EMAIL_TO.split(',')[0].trim(),
@@ -152,7 +152,7 @@ export async function handlePedido(request, env) {
   }
 
   await Promise.all(tasks);
-  return json({ ok: emailOk || waOk, email: emailOk, whatsapp: waOk, id: order.id, total });
+  return json({ ok: emailOk || waOk, email: emailOk, whatsapp: waOk, ...(emailError ? { emailError } : {}), ...(!env.RESEND_API_KEY || !env.ORDER_EMAIL_TO ? { emailConfig: 'faltan RESEND_API_KEY u ORDER_EMAIL_TO' } : {}), id: order.id, total });
 }
 
 export { json };
