@@ -1,10 +1,10 @@
 /**
- * POST /api/pedido — Cloudflare Pages Function.
+ * POST /api/pedido — lo atiende src/worker.js (Cloudflare Worker).
  *
  * Recibe un pedido desde el checkout, verifica los precios contra data/tienda.json
  * y avisa a la empresa por email (Resend) y por WhatsApp (CallMeBot).
  *
- * Variables de entorno (Cloudflare → proyecto → Settings → Variables and Secrets):
+ * Variables de entorno (Cloudflare → Worker → Settings → Variables and Secrets):
  *   RESEND_API_KEY     clave de resend.com (secreta)
  *   ORDER_EMAIL_TO     email de la empresa que recibe los pedidos (ej. ventas@empresa.com)
  *   ORDER_EMAIL_FROM   remitente; sin dominio propio verificado usar "Pedidos <onboarding@resend.dev>"
@@ -29,8 +29,7 @@ const money = (n) => {
 };
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-export async function onRequestPost(context) {
-  const { request, env } = context;
+export async function handlePedido(request, env) {
 
   const raw = await request.text();
   if (raw.length > MAX_BODY) return json({ ok: false, error: 'Pedido demasiado grande' }, 413);
@@ -156,6 +155,4 @@ export async function onRequestPost(context) {
   return json({ ok: emailOk || waOk, email: emailOk, whatsapp: waOk, id: order.id, total });
 }
 
-export function onRequest() {
-  return json({ ok: false, error: 'Usá POST' }, 405);
-}
+export { json };

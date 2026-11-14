@@ -13,17 +13,20 @@ Todo está en **`data/tienda.json`**:
 
 Para cambiar algo, editá el archivo en GitHub y guardá los cambios (commit). El sitio se actualiza solo en uno o dos minutos.
 
-## Publicar en Cloudflare Pages (gratis)
+## Publicar en Cloudflare (gratis)
 
-1. Entrá a dash.cloudflare.com → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
-2. Elegí este repositorio.
-3. Framework preset: **None**. Build command: vacío. Output directory: `/`.
-4. **Save and Deploy**. Queda en `https://<nombre>.pages.dev`.
-5. Opcional: en **Custom domains** conectás el dominio propio.
+El proyecto es un **Worker con archivos estáticos** (`wrangler.jsonc`): la tienda se sirve tal cual y `src/worker.js` atiende solo `/api/pedido`.
+
+1. dash.cloudflare.com → **Workers & Pages** → **Create** → **Import a repository** → elegí este repositorio.
+2. Deploy command: `npx wrangler deploy` (sin build command).
+3. El nombre del Worker en Cloudflare tiene que coincidir con `name` en `wrangler.jsonc` (`nogal`).
+4. Opcional: en **Settings → Domains & Routes** conectás el dominio propio.
+
+`.assetsignore` evita que se publiquen archivos internos (código del Worker, README, configuración).
 
 ## Cómo llegan los pedidos
 
-Al confirmar, la página envía el pedido a `functions/api/pedido.js` (una función de Cloudflare Pages). La función verifica los precios contra `data/tienda.json` y avisa a la empresa:
+Al confirmar, la página envía el pedido a `/api/pedido`, que atiende el Worker (`src/pedido.js`). La función verifica los precios contra `data/tienda.json` y avisa a la empresa:
 
 - **Email** con el detalle del pedido, mediante [Resend](https://resend.com). Al responder ese email, le escribís directo al cliente.
 - **WhatsApp** al celular de la empresa, mediante [CallMeBot](https://www.callmebot.com) (gratis, uso personal, con cupos limitados) o [TextMeBot](https://textmebot.com) (US$1/mes). Configurás uno de los dos.
@@ -35,7 +38,7 @@ Si la función no está configurada o falla, el cliente ve el botón **Enviar pe
 1. **Email:** creá una cuenta gratis en resend.com **con el email que va a recibir los pedidos**. En *API Keys* creá una clave.
    Sin dominio propio, Resend solo deja enviar al email de esa cuenta; con un dominio verificado podés enviar a cualquier dirección y mandar copia al cliente.
 2. **WhatsApp:** desde el celular que va a recibir los pedidos, seguí los pasos de callmebot.com → *WhatsApp* (agendás su número y le mandás el mensaje de activación). Te responde con tu `apikey`.
-3. En Cloudflare: **Workers & Pages** → el proyecto → **Settings** → **Variables and Secrets** → agregá, en *Production*:
+3. En Cloudflare: **Workers & Pages** → el Worker → **Settings** → **Variables and Secrets** → agregá:
 
 | Variable | Valor |
 |---|---|
@@ -48,7 +51,7 @@ Si la función no está configurada o falla, el cliente ve el botón **Enviar pe
 | `TEXTMEBOT_APIKEY` | la apikey de textmebot.com (tipo *Secret*) |
 | `CUSTOMER_COPY` | opcional: `true` para mandar copia al cliente (requiere dominio verificado) |
 
-4. **Deployments** → en el último despliegue, **Retry deployment** para que tome las variables.
+4. Las variables se aplican al guardarlas. Si no, volvé a desplegar desde **Deployments**.
 
 ### Medios de pago
 
