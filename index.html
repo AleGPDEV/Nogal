@@ -240,6 +240,7 @@ label.f .er{color:var(--err);font-size:14px;font-weight:500}
 .ok-hero p{font-size:18px}
 .note{background:#FBF2CF;border-radius:16px;padding:16px 16px;font-size:16px}
 .note.info{background:var(--stage)}
+.note.ok{background:#E3F1E4}
 pre.bank{white-space:pre-wrap;font:inherit;margin:8px 0 0}
 
 /* orders */
@@ -1110,7 +1111,7 @@ function viewCheckout(){
       </div>`:''}
       </div>
       <div class="panel"><h3>3. Pago</h3><div class="radios">
-        ${payList().map(([k,n])=>`<label class="radio ${f.pay===k?'on':''}"><input type="radio" name="pay" value="${k}" ${f.pay===k?'checked':''}><div><b>${n}</b><span>${k==='transferencia'?'Te mostramos los datos bancarios al confirmar.':k==='efectivo'?'Pagás al recibir el pedido o al retirarlo.':'Pagás con POS al recibir o retirar, o te enviamos un link de pago.'}</span></div>${k==='tarjeta'&&Number(c.cardFee)>0?`<em>+${Number(c.cardFee)}%</em>`:k!=='tarjeta'&&Number(c.cashDisc)>0?`<em style="color:var(--ok)">−${Number(c.cashDisc)}%</em>`:''}</label>`).join('')}
+        ${payList().map(([k,n])=>`<label class="radio ${f.pay===k?'on':''}"><input type="radio" name="pay" value="${k}" ${f.pay===k?'checked':''}><div><b>${n}</b><span>${k==='transferencia'?'Te mostramos los datos bancarios al confirmar.':k==='efectivo'?'Pagás al recibir el pedido o al retirarlo.':(S.cardOnline ? 'Pagás online con Plexo, de forma segura. Visa, Mastercard, OCA y más.' : 'Pagás con POS al recibir o retirar, o te enviamos un link de pago.')}</span></div>${k==='tarjeta'&&Number(c.cardFee)>0?`<em>+${Number(c.cardFee)}%</em>`:k!=='tarjeta'&&Number(c.cashDisc)>0?`<em style="color:var(--ok)">−${Number(c.cashDisc)}%</em>`:''}</label>`).join('')}
       </div></div>
     </div>
     <aside>
@@ -1124,7 +1125,7 @@ function viewCheckout(){
         ${t.adj?`<div class="tot ${t.adj<0?'disc':''}"><span>${esc(t.adjLabel)}</span><span>${t.adj<0?'− ':'+ '}${fmt(Math.abs(t.adj))}</span></div>`:''}
         <div class="tot big"><span>Total</span><span>${fmt(t.total)}</span></div>
         <p class="small muted" style="margin:8px 0 16px">Precios en pesos uruguayos, IVA incluido.</p>
-        <button class="btn btn-a btn-block" type="submit" aria-busy="${S.placing}">${S.placing?'Enviando pedido…':'Confirmar pedido'}</button>
+        <button class="btn btn-a btn-block" type="submit" aria-busy="${S.placing}">${S.placing?'Enviando pedido…':(f.pay==='tarjeta'&&S.cardOnline?'Ir a pagar con tarjeta':'Confirmar pedido')}</button>
         ${Object.keys(e).length?'<p class="small" style="color:var(--err);margin:12px 0 0" role="alert">Faltan datos para enviar el pedido. Completá los campos marcados en rojo.</p>':''}
       </div>
     </aside>
@@ -1203,8 +1204,17 @@ async function placeOrder(){
       const ctl = new AbortController(); const tm = setTimeout(()=>ctl.abort(), 15000);
       const r = await fetch('api/pedido', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({...o, website: hp}), signal: ctl.signal});
       clearTimeout(tm);
-      const res = r.ok ? await r.json() : null;
-      if(res && res.ok){ saved = true; o.notified = true; }
+      const res = await r.json().catch(()=>null);
+      if(res && res.redirect){
+        // Pago con tarjeta: el carrito se conserva hasta que Plexo confirme.
+        o.saved = true; o.notified = true; o.payStatus = 'pending';
+        S.lastOrder = o; LS.set('lastOrder', o); LS.set('customer', {...S.form, notes:''});
+        location.href = res.redirect; return;
+      }
+      if(res && !res.ok && res.error && o.pay==='tarjeta'){
+        S.placing = false; render(); toast(res.error); return;
+      }
+      if(r.ok && res && res.ok){ saved = true; o.notified = true; }
     }catch(err){ console.warn('No se pudo enviar el pedido', err); }
   }
   o.saved = saved;
@@ -1226,7 +1236,15 @@ function viewSuccess(){
     <div class="panel"><h3>Próximos pasos</h3>
       ${o.pay==='transferencia'?`<p>Transferí <b>${fmt(o.total)}</b> indicando el número de pedido <b>${esc(o.id)}</b> y envianos el comprobante.</p>${c.bank?`<div class="note info"><b>Datos bancarios</b><pre class="bank">${esc(c.bank)}</pre></div>`:'<p class="muted small">Te enviamos los datos bancarios por WhatsApp o email.</p>'}`:''}
       ${o.pay==='efectivo'?`<p>Pagás <b>${fmt(o.total)}</b> en efectivo ${o.delivery==='retiro'?'al retirar en el showroom':'al recibir tu pedido'}.</p>`:''}
-      ${o.pay==='tarjeta'?`<p>Pagás <b>${fmt(o.total)}</b> con tarjeta ${o.delivery==='retiro'?'en el showroom':'al recibir (llevamos POS)'}, o si preferís te enviamos un link de pago.</p>`:''}
+      ${o.pay==='tarjeta' && o.payStatus ? ({
+          checking:`<div class="note info" role="status"><b>Confirmando tu pago…</b> Esto tarda unos segundos.</div>`,
+          approved:`<div class="note ok" role="status"><b>Pago aprobado.</b> Cobramos <b>${fmt(o.total)}</b> en tu tarjeta.</div>`,
+          denied:`<div class="note" role="status"><b>El pago no fue aprobado.</b> No se cobró nada. Tu carrito sigue guardado: <a href="#checkout">probá con otra tarjeta u otro medio de pago</a>.</div>`,
+          cancelled:`<div class="note" role="status"><b>El pago no se completó.</b> No se cobró nada.</div>`,
+          unconfirmed:`<div class="note info" role="status"><b>Todavía no tenemos la confirmación del pago.</b> Si se aprobó, te avisamos para coordinar.</div>`,
+          pending:`<div class="note info" role="status"><b>Pago pendiente.</b></div>`
+        }[o.payStatus]||'') : ''}
+      ${o.pay==='tarjeta' && !o.payStatus?`<p>Pagás <b>${fmt(o.total)}</b> con tarjeta ${o.delivery==='retiro'?'en el showroom':'al recibir (llevamos POS)'}, o si preferís te enviamos un link de pago.</p>`:''}
       <p class="muted">Te contactamos al ${esc(o.customer.phone)} para coordinar ${o.delivery==='retiro'?'el retiro':'la entrega'}.</p>
       <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:16px">
         ${wa?`<a class="btn btn-wa" href="${wa}" target="_blank" rel="noopener">Enviar pedido por WhatsApp</a>`:''}
@@ -1731,6 +1749,47 @@ async function loadStatic(){
     S.dbState = 'static';
   }catch(e){ S.dbState = 'offline'; }
   render();
+  // Si el servidor tiene Plexo configurado, se habilita el pago con tarjeta online.
+  try{
+    const j = await fetch('api/pedido', {cache:'no-store'}).then(r=>r.ok?r.json():null);
+    if(j && j.tarjeta){
+      S.cardOnline = true;
+      const pm = Array.isArray(S.config.payMethods) && S.config.payMethods.length ? S.config.payMethods : Object.keys(PAYS);
+      if(!pm.includes('tarjeta')) S.config = {...S.config, payMethods:[...pm, 'tarjeta']};
+      softRender();
+    }
+  }catch(e){}
+  checkPayReturn();
+}
+
+/* ================= Vuelta desde la página de pago (Plexo) ================= */
+function checkPayReturn(){
+  const q = new URLSearchParams(location.search); const st = q.get('pago'); const id = q.get('pedido') || '';
+  if(!st) return;
+  history.replaceState(null, '', location.pathname + '#' + (st==='ok' ? 'pedido-confirmado' : 'checkout'));
+  const o = S.lastOrder && S.lastOrder.id === id ? S.lastOrder : null;
+  if(st !== 'ok'){
+    if(o){ o.payStatus = 'cancelled'; LS.set('lastOrder', o); }
+    render(); toast('El pago no se completó. Podés intentar de nuevo o elegir otro medio de pago.');
+    return;
+  }
+  if(!o){ render(); return; }
+  o.payStatus = 'checking'; LS.set('lastOrder', o); render();
+  let tries = 0;
+  const poll = async () => {
+    tries++;
+    try{
+      const j = await fetch('api/pago?pedido=' + encodeURIComponent(id), {cache:'no-store'}).then(r=>r.json());
+      const s = j && j.status;
+      if(s==='approved' || s==='authorized'){ o.payStatus = 'approved'; o.paid = true; S.cart = []; saveCart(); S.coupon=''; LS.set('coupon',''); updateBadges(); }
+      else if(['denied','failed','cancelled','expired'].includes(s)){ o.payStatus = 'denied'; }
+    }catch(e){}
+    if(o.payStatus === 'checking' && tries < 8){ setTimeout(poll, 2500); return; }
+    if(o.payStatus === 'checking') o.payStatus = 'unconfirmed';
+    LS.set('lastOrder', o); S.localOrders = [o, ...S.localOrders.filter(x=>x.id!==o.id)].slice(0,30); LS.set('orders', S.localOrders);
+    if(currentHash()==='pedido-confirmado') render();
+  };
+  poll();
 }
 
 /* ================= Conexión con la base de datos ================= */

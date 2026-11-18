@@ -53,9 +53,29 @@ Si la función no está configurada o falla, el cliente ve el botón **Enviar pe
 
 4. Las variables se aplican al guardarlas. Si no, volvé a desplegar desde **Deployments**.
 
+### Pago con tarjeta (Plexo)
+
+El cliente paga en la página segura de Plexo; la tienda nunca ve los datos de la tarjeta.
+
+1. El servidor recalcula el total (productos, cupón, envío y recargo) y crea una sesión de pago en Plexo.
+2. Te llega el aviso del pedido *esperando pago con tarjeta*.
+3. El cliente paga y vuelve a la tienda, que consulta a Plexo y le muestra si el pago se aprobó.
+4. Plexo avisa al servidor (`/api/plexo/callback`), que confirma el estado con Plexo y te manda **✅ Pago aprobado** o **❌ Pago rechazado**.
+
+Para activarlo, agregá en Cloudflare (todas tipo *Secret*):
+
+| Variable | Valor |
+|---|---|
+| `PLEXO_CLIENT_ID` | clientId que da Plexo |
+| `PLEXO_API_KEY` | api-key que da Plexo |
+| `PLEXO_MERCHANT_ID` | número de comercio en Plexo |
+| `PLEXO_ENV` | `production` para cobrar de verdad; sin esta variable usa el entorno de pruebas |
+
+Con las tres primeras cargadas, la opción **Tarjeta** aparece sola en la tienda. Para probar, usá las tarjetas de prueba de Plexo (por ejemplo `4444 3333 2222 1111`, cualquier CVV y vencimiento futuro).
+
 ### Medios de pago
 
-En `config.payMethods` de `data/tienda.json` elegís qué opciones ve el cliente: `transferencia`, `efectivo` y `tarjeta`. La tarjeta está oculta hasta integrar la pasarela de pago.
+En `config.payMethods` de `data/tienda.json` elegís qué opciones ve el cliente: `transferencia`, `efectivo` y `tarjeta`. La tarjeta se agrega sola cuando Plexo está configurado.
 
 ## Próximos pasos posibles
 
